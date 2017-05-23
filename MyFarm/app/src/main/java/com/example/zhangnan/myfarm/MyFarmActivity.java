@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Rect;
+import android.graphics.drawable.AnimatedStateListDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -16,29 +17,30 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.ikimuhendis.ldrawer.ActionBarDrawerToggle;
 import com.ikimuhendis.ldrawer.DrawerArrowDrawable;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MyFarmActivity extends AppCompatActivity {
 
     private String[] name={"My Farm","远程控制","机器人控制","报警信息","历史图表","历史数据","设置","关于我们"};
-    private  String[] values = new String[]{
-            "Stop Animation (Back icon)",
-            "Stop Animation (Home icon)",
-            "Start Animation",
-            "Change Color",
-            "GitHub Page",
-            "Share",
-            "Rate"
-    };
+    private  String[] values = new String[]{ "操作记录", "日志", "检查更新", "设置","退出登录",};
+    private  int[] img = new int[]{R.drawable.ic_action_record,R.drawable.ic_action_log,
+            R.drawable.ic_action_update,R.drawable.ic_action_setting, R.drawable.ic_action_quit};
+    private List<Map<String, Object>> data;
 
     private int itemImages[] = {
             R.drawable.farm,
@@ -56,6 +58,8 @@ public class MyFarmActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
+    private LinearLayout mDrawerLinearLayout;
+    private ImageView mDrawerImageView;
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerArrowDrawable drawerArrow;
     private boolean drawerArrowColor;
@@ -79,6 +83,7 @@ public class MyFarmActivity extends AppCompatActivity {
 
         getWindow().setStatusBarColor(getResources().getColor(R.color.app_green));
 
+        data = getData();
         RecyclerView recyclerView = (RecyclerView)findViewById(R.id.my_farm_recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(this,2));
         recyclerView.addItemDecoration(new MyFarmItemDecoration(2));
@@ -190,17 +195,33 @@ public class MyFarmActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if (mDrawerLayout.isDrawerOpen(mDrawerList)) {
-                    mDrawerLayout.closeDrawer(mDrawerList);
+                if (mDrawerLayout.isDrawerOpen(mDrawerLinearLayout)) {
+                    mDrawerLayout.closeDrawer(mDrawerLinearLayout);
                 } else {
-                    mDrawerLayout.openDrawer(mDrawerList);
+                    mDrawerLayout.openDrawer(mDrawerLinearLayout);
                 }
 
             }
         });
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.navdrawer);
+        mDrawerLinearLayout = (LinearLayout) findViewById(R.id.nav_drawer_linear_layout);
+        mDrawerList = (ListView) findViewById(R.id.nav_drawer);
+        mDrawerImageView =(ImageView)findViewById(R.id.nav_drawer_image_view);
+
+        mDrawerImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(),"还未设置",Toast.LENGTH_LONG).show();
+            }
+        });
+
+        mDrawerLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
 
         drawerArrow = new DrawerArrowDrawable(this) {
@@ -226,63 +247,52 @@ public class MyFarmActivity extends AppCompatActivity {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1, values);
-        mDrawerList.setAdapter(adapter);
-//        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view,
-//                                    int position, long id) {
-//                switch (position) {
-//                    case 0:
-//                        mDrawerToggle.setAnimateEnabled(false);
-//                        drawerArrow.setProgress(1f);
-//                        break;
-//                    case 1:
-//                        mDrawerToggle.setAnimateEnabled(false);
-//                        drawerArrow.setProgress(0f);
-//                        break;
-//                    case 2:
-//                        mDrawerToggle.setAnimateEnabled(true);
-//                        mDrawerToggle.syncState();
-//                        break;
-//                    case 3:
-//                        if (drawerArrowColor) {
-//                            drawerArrowColor = false;
-//                            drawerArrow.setColor(R.color.ldrawer_color);
-//                        } else {
-//                            drawerArrowColor = true;
-//                            drawerArrow.setColor(R.color.drawer_arrow_second_color);
-//                        }
-//                        mDrawerToggle.syncState();
-//                        break;
-//                    case 4:
-//                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/IkiMuhendis/LDrawer"));
-//                        startActivity(browserIntent);
-//                        break;
-//                    case 5:
-//                        Intent share = new Intent(Intent.ACTION_SEND);
-//                        share.setType("text/plain");
-//                        share.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                        share.putExtra(Intent.EXTRA_SUBJECT,
-//                                getString(R.string.app_name));
-//                        share.putExtra(Intent.EXTRA_TEXT, getString(R.string.app_description) + "\n" +
-//                                "GitHub Page :  https://github.com/IkiMuhendis/LDrawer\n" +
-//                                "Sample App : https://play.google.com/store/apps/details?id=" +
-//                                getPackageName());
-//                        startActivity(Intent.createChooser(share,
-//                                getString(R.string.app_name)));
-//                        break;
-//                    case 6:
-//                        String appUrl = "https://play.google.com/store/apps/details?id=" + getPackageName();
-//                        Intent rateIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(appUrl));
-//                        startActivity(rateIntent);
-//                        break;
-//                }
-//
-//            }
-//        });
 
+        String[] from = {"img","text"};
+        int[] to = {R.id.drawer_layout_image,R.id.drawer_layout_text};
+        mDrawerList.setAdapter(new SimpleAdapter(this,data,R.layout.drawer_layout_list_item,from,to));
+        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                switch (position) {
+                    case 0:
+                        Toast.makeText(getApplicationContext(),"还未设置",Toast.LENGTH_LONG).show();
+                        break;
+                    case 1:
+                        Toast.makeText(getApplicationContext(),"还未设置",Toast.LENGTH_LONG).show();
+                        break;
+                    case 2:
+                        Toast.makeText(getApplicationContext(),"还未设置",Toast.LENGTH_LONG).show();
+                        break;
+                    case 3:
+                        Toast.makeText(getApplicationContext(),"还未设置",Toast.LENGTH_LONG).show();
+                        break;
+                    case 4:
+                        Toast.makeText(getApplicationContext(),"还未设置",Toast.LENGTH_LONG).show();
+                        break;
+                    case 5:
+                        Toast.makeText(getApplicationContext(),"还未设置",Toast.LENGTH_LONG).show();
+                        break;
+                }
+
+            }
+        });
+
+    }
+
+    private List<Map<String, Object>> getData()
+    {
+        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+        Map<String, Object> map;
+        for(int i = 0;i<values.length;i++)
+        {
+            map = new HashMap<String, Object>();
+            map.put("img", img[i]);
+            map.put("text", values[i]);
+            list.add(map);
+        }
+        return list;
     }
 
     @Override

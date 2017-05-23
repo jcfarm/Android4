@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 
 import com.example.zhangnan.myfarm.activity_information.FieldsInfo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -89,9 +91,8 @@ public class FieldsActivity extends AppCompatActivity{
 
         @Override
         public void onClick(View view) {
-            switch (getPosition()){
-                case 0:i = FieldsDetailsActivity.newIntent(FieldsActivity.this);startActivity(i);break;
-            }
+            i.putExtra("positon", (Serializable) MqttMessages.messageMap.get(getPosition()+1));
+            FieldsDetailsActivity.newIntent(FieldsActivity.this);startActivity(i);
         }
     }
 
