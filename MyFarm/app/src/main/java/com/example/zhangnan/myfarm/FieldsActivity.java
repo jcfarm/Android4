@@ -91,8 +91,14 @@ public class FieldsActivity extends AppCompatActivity{
 
         @Override
         public void onClick(View view) {
-            i.putExtra("positon", (Serializable) MqttMessages.messageMap.get(getPosition()+1));
-            FieldsDetailsActivity.newIntent(FieldsActivity.this);startActivity(i);
+            if (!MqttMessages.messageMap.isEmpty()){
+                i.putExtra("positon", (Serializable) MqttMessages.messageMap.get(getPosition()+1));
+                i = FieldsDetailsActivity.newIntent(FieldsActivity.this);startActivity(i);
+            }else {
+                i = FieldsDetailsActivity.newIntent(FieldsActivity.this);
+                startActivity(i);
+            }
+
         }
     }
 
