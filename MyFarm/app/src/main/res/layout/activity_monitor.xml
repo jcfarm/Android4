@@ -4,8 +4,6 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:clipChildren="false"
     android:background="@color/white">
 
     <LinearLayout
@@ -31,6 +29,7 @@
             android:textSize="16dp" />
 
         <ImageView
+            android:id="@+id/position_video"
             android:layout_width="40dp"
             android:layout_height="30dp"
             android:layout_weight="1"
@@ -38,14 +37,10 @@
 
     </LinearLayout>
 
-    <com.example.zhangnan.myfarm.swipecardrecyclerview.SwipeCardRecyclerView
-        android:id="@+id/swipe_card_recycler_view"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view_video"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginBottom="20dp">
+        android:layout_height="wrap_content">
 
-    </com.example.zhangnan.myfarm.swipecardrecyclerview.SwipeCardRecyclerView>
+    </android.support.v7.widget.RecyclerView>
 </LinearLayout>
