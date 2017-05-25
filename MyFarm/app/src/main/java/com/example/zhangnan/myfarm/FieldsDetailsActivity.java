@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Switch;
@@ -99,8 +100,11 @@ public class FieldsDetailsActivity extends AppCompatActivity {
         fieldsDetailsSensorsInfoToString();
         fieldsDetailsControlInfoToString();
         initControls();
+        changeSwitchText();
 
         nameTextView.setText(fieldsName);
+
+
     }
 
     private  class FieldsDetailsHodler extends RecyclerView.ViewHolder {
@@ -241,20 +245,47 @@ public class FieldsDetailsActivity extends AppCompatActivity {
         tmembraneSeekBar = (SeekBar) findViewById(R.id.tmembrane_seek_bar);
         nmembraneSeekBar = (SeekBar) findViewById(R.id.nmembrane_seek_bar);
         if (!fieldsDetailsControlsInfoMap.isEmpty()){
-            if ((float)fieldsDetailsControlsInfoMap.get(k++) == 1.0f){
-                lampSwitch.setChecked(true);
-            }else lampSwitch.setChecked(false);
+                if ((float)fieldsDetailsControlsInfoMap.get(k++) == 1.0f){
+                    lampSwitch.setChecked(true);
+                }else {
+                    lampSwitch.setChecked(false);
+                }
 
-            if ((float)fieldsDetailsControlsInfoMap.get(k++) == 1.0f){
-                lightSwitch.setChecked(true);
-            }else lampSwitch.setChecked(false);
-
-            tmembraneSeekBar.setProgress((int) (fieldsDetailsControlsInfoMap.get(k++) * 100));
-            nmembraneSeekBar.setProgress((int) (fieldsDetailsControlsInfoMap.get(k++) * 100));
-        }
+                if ((float)fieldsDetailsControlsInfoMap.get(k++) == 1.0f){
+                    lightSwitch.setChecked(true);
+                }else lampSwitch.setChecked(false);
 
 
+                tmembraneSeekBar.setProgress((int) (fieldsDetailsControlsInfoMap.get(k++) * 100));
+                nmembraneSeekBar.setProgress((int) (fieldsDetailsControlsInfoMap.get(k++) * 100));
+            }
     }
+
+    public void changeSwitchText(){
+        lightSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    lightSwitch.setText("开");
+                }else {
+                    lightSwitch.setText("关");
+                }
+            }
+        });
+
+        lampSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    lampSwitch.setText("开");
+                }else {
+                    lampSwitch.setText("关");
+                }
+            }
+        });
+    }
+
+
 
     //得到上一个页面intent传来的FieldsDetailsInfo
     private void getIntentMessage(){

@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -68,7 +69,6 @@ public class ControlDetalisActivity extends AppCompatActivity {
                 case 0:{
                     idTextView.setText(controller.getWater_pumpControllers().get(position).getId());
                     aSwitch.setChecked(controller.getWater_pumpControllers().get(position).getState());
-                    Log.d(TAG, "bindHodler: "+controller.getWater_pumpControllers().get(position).getState());
                 }break;
                 case 1:{
                     idTextView.setText(controller.getDraught_fensController().get(position).getId());
@@ -118,8 +118,23 @@ public class ControlDetalisActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(SoundHolder soundHodler, int position) {
+        public void onBindViewHolder(final SoundHolder soundHodler, int position) {
             soundHodler.bindHolder(controller,position);
+            if (soundHodler.aSwitch.isChecked()){
+                soundHodler.aSwitch.setText("开");
+            }else{
+                soundHodler.aSwitch.setText("关");
+            }
+            soundHodler.aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked){
+                        soundHodler.aSwitch.setText("开");
+                    }else {
+                        soundHodler.aSwitch.setText("关");
+                    }
+                }
+            });
 
         }
 
