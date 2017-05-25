@@ -19,27 +19,23 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.example.zhangnan.myfarm.ChartUtils.ChartUtils;
 import com.example.zhangnan.myfarm.activity_information.FieldsDetailsInfo;
-import com.example.zhangnan.myfarm.activity_information.blower;
 import com.example.zhangnan.myfarm.activity_information.co2;
 import com.example.zhangnan.myfarm.activity_information.lamp;
 import com.example.zhangnan.myfarm.activity_information.light;
 import com.example.zhangnan.myfarm.activity_information.nmembrane;
-import com.example.zhangnan.myfarm.activity_information.pump;
 import com.example.zhangnan.myfarm.activity_information.salt;
 import com.example.zhangnan.myfarm.activity_information.tmembrane;
 import com.example.zhangnan.myfarm.activity_information.water;
 import com.example.zhangnan.myfarm.activity_information.web;
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.utils.ColorTemplate;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.Entry;
 import com.melnykov.fab.FloatingActionButton;
 import com.melnykov.fab.ObservableScrollView;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -53,7 +49,7 @@ public class FieldsDetailsActivity extends AppCompatActivity {
     private ViewPager viewPager_banner;
     private ImageView[] mImageViews;
     private int[] imgIdArray;
-    private BarChart barChart;
+    private LineChart lineChart;
     private RecyclerView fieldsDetailsRecyclerView;
     private String[] name ={"light","co2","water","salt"};
     private SeekBar tmembraneSeekBar;
@@ -94,7 +90,10 @@ public class FieldsDetailsActivity extends AppCompatActivity {
         viewPager_banner = (ViewPager) findViewById(R.id.fields_list_item_view_pager_banner);
         viewPager_banner.setAdapter(new BannerViewPagerAdapter());
 
-        drawChart();
+        lineChart = (LineChart) findViewById(R.id.line_chart);
+        ChartUtils.initChart(lineChart);
+        ChartUtils.notifyDataSetChanged(lineChart, getData(), ChartUtils.dayValue);
+
         initFloatingActionButton();
         getIntentMessage();
         fieldsDetailsSensorsInfoToString();
@@ -105,6 +104,18 @@ public class FieldsDetailsActivity extends AppCompatActivity {
         nameTextView.setText(fieldsName);
 
 
+    }
+
+    private List<Entry> getData() {
+        List<Entry> values = new ArrayList<>();
+        values.add(new Entry(0, 15));
+        values.add(new Entry(1, 15));
+        values.add(new Entry(2, 15));
+        values.add(new Entry(3, 20));
+        values.add(new Entry(4, 25));
+        values.add(new Entry(5, 20));
+        values.add(new Entry(6, 20));
+        return values;
     }
 
     private  class FieldsDetailsHodler extends RecyclerView.ViewHolder {
@@ -194,25 +205,6 @@ public class FieldsDetailsActivity extends AppCompatActivity {
         });
     }
 
-    public void drawChart(){
-        barChart = (BarChart)findViewById(R.id.bar_chart);
-
-        List<BarEntry> entries = new ArrayList<>();
-        entries.add(new BarEntry(1,1));
-        entries.add(new BarEntry(2,2));
-        entries.add(new BarEntry(3,3));
-        entries.add(new BarEntry(4,4));
-        entries.add(new BarEntry(5,5));
-        entries.add(new BarEntry(6,6));
-        BarDataSet dataSet = new BarDataSet(entries,"");
-       dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
-
-        BarData data = new BarData(dataSet);
-
-        barChart.setDescription(null);
-        barChart.setDrawValueAboveBar(false);
-        barChart.setData(data);
-    }
 
     public class MyFieldsDetailsItemDecoration extends RecyclerView.ItemDecoration{
         int mSpace;
