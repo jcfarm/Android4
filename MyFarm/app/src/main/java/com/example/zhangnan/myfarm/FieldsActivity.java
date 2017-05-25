@@ -31,7 +31,7 @@ import java.util.Map;
 public class FieldsActivity extends AppCompatActivity{
 
     private RecyclerView recyclerView;
-    private int recyclerViewClickTag = 0;//RerecyclerView点击标志
+    private int recyclerViewClickTag = 0;//RerecyclerView点击标志kjjkj
     private Intent i;
 
     private EditText searchEditText;
