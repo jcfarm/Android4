@@ -32,7 +32,7 @@ public class ControlActivity extends AppCompatActivity {
             R.drawable.juanmo
     };
     private SoundAdapter soundAdapter;
-    private String TAG="ControlActivity";
+    private String TAG="ControlActivity";//Tag凌锐修改
     private Intent i;
 
     @Override
