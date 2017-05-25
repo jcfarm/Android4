@@ -1,3 +1,16 @@
 # android4
-lingrui zhangnan
-zhang yuan zheng
+MyFarm使用简介：
+
+
+
+
+
+
+MyFarm截图：
+![Alt text](img/home.png)
+
+
+
+
+
+MyFarm项目构造：

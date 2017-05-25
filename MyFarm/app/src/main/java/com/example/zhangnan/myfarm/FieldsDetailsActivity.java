@@ -60,6 +60,8 @@ public class FieldsDetailsActivity extends AppCompatActivity {
     private Switch lightSwitch;
     private Switch lampSwitch;
     private Intent intentMessage;
+    private TextView nameTextView;
+    private String fieldsName;
 
     private FieldsDetailsInfo fieldsDetailsInfo;
     private int fieldsDetailsInfoCount = 0;
@@ -73,6 +75,7 @@ public class FieldsDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_fields_details);
         getWindow().setStatusBarColor(getResources().getColor(R.color.app_green));
 
+        nameTextView = (TextView) findViewById(R.id.fields_name);
         imgIdArray = new int[]{R.drawable.img1, R.drawable.img2, R.drawable.img3,R.drawable.img4,R.drawable.img5};
         mImageViews = new ImageView[imgIdArray.length];
         for(int i=0; i<mImageViews.length; i++){
@@ -96,6 +99,8 @@ public class FieldsDetailsActivity extends AppCompatActivity {
         fieldsDetailsSensorsInfoToString();
         fieldsDetailsControlInfoToString();
         initControls();
+
+        nameTextView.setText(fieldsName);
     }
 
     private  class FieldsDetailsHodler extends RecyclerView.ViewHolder {
@@ -254,9 +259,15 @@ public class FieldsDetailsActivity extends AppCompatActivity {
     //得到上一个页面intent传来的FieldsDetailsInfo
     private void getIntentMessage(){
         intentMessage = getIntent();
-        if ((FieldsDetailsInfo) intentMessage.getSerializableExtra("position") != null){
-            fieldsDetailsInfo = (FieldsDetailsInfo) intentMessage.getSerializableExtra("position");
-            fieldsDetailsInfoCount = fieldsDetailsInfo.getCount();
+        if (intentMessage.getExtras()!=null){
+            int position = (int) intentMessage.getExtras().get("position");
+            fieldsName = (String) intentMessage.getExtras().get("name");
+            System.out.println("*******************"+fieldsName);
+            if (!MqttMessages.messageMap.isEmpty())
+            {
+                fieldsDetailsInfo =  MqttMessages.messageMap.get(position);
+                fieldsDetailsInfoCount = fieldsDetailsInfo.getCount();
+            }
         }
 
     }

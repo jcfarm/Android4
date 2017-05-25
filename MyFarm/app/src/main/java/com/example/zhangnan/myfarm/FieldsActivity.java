@@ -52,7 +52,6 @@ public class FieldsActivity extends AppCompatActivity{
         recyclerView = (RecyclerView) findViewById(R.id.fields_recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(this,1));
         recyclerView.setAdapter(soundAdapter = new SoundAdapter(fieldsInfos));
-
     }
 
     private void initSearch(){
@@ -86,16 +85,24 @@ public class FieldsActivity extends AppCompatActivity{
             phTextView.setText(field.getIllumination());
             fieldIdTextView.setText(field.getId()+"号田");
             fieldNameTextView.setText(field.getName());
-
         }
 
         @Override
         public void onClick(View view) {
             if (!MqttMessages.messageMap.isEmpty()){
-                i.putExtra("positon", (Serializable) MqttMessages.messageMap.get(getPosition()+1));
-                i = FieldsDetailsActivity.newIntent(FieldsActivity.this);startActivity(i);
-            }else {
                 i = FieldsDetailsActivity.newIntent(FieldsActivity.this);
+                Bundle bundle = new Bundle();
+                bundle.putString("name","hello");
+                bundle.putInt("position",getPosition()+1);
+                i.putExtras(bundle);
+                startActivity(i);
+            }else {
+                TextView tv = (TextView) itemView.findViewById(R.id.fields_list_item_name_text_view);
+                i = FieldsDetailsActivity.newIntent(FieldsActivity.this);
+                Bundle bundle = new Bundle();
+                bundle.putString("name", (String) tv.getText());
+                bundle.putInt("position",getPosition()+1);
+                i.putExtras(bundle);
                 startActivity(i);
             }
 
