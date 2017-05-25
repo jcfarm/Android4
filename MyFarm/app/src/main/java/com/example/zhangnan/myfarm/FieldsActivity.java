@@ -97,10 +97,9 @@ public class FieldsActivity extends AppCompatActivity{
                 i.putExtras(bundle);
                 startActivity(i);
             }else {
-                TextView tv = (TextView) itemView.findViewById(R.id.fields_list_item_name_text_view);
                 i = FieldsDetailsActivity.newIntent(FieldsActivity.this);
                 Bundle bundle = new Bundle();
-                bundle.putString("name", (String) tv.getText());
+                bundle.putString("name", (String) fieldNameTextView.getText());
                 bundle.putInt("position",getPosition()+1);
                 i.putExtras(bundle);
                 startActivity(i);
