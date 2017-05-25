@@ -219,7 +219,7 @@
                         android:orientation="vertical">
 
                         <Switch
-                            android:id="@+id/light_switch"
+                            android:id="@+id/fields_details_light_switch"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_margin="10dp"
@@ -231,7 +231,7 @@
                             android:track="@drawable/switch_track" />
 
                         <Switch
-                            android:id="@+id/lamp_switch"
+                            android:id="@+id/fields_details_fan_switch"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_margin="10dp"
@@ -248,7 +248,8 @@
                             android:layout_margin="5dp"
                             android:layout_weight="1"
                             android:background="@drawable/button"
-                            android:text="确定" />
+                            android:text="确定"
+                            android:id="@+id/fields_details_film_side_sure_button"/>
 
                         <Button
                             android:layout_width="wrap_content"
@@ -256,7 +257,8 @@
                             android:layout_margin="5dp"
                             android:layout_weight="1"
                             android:background="@drawable/button"
-                            android:text="确定" />
+                            android:text="确定"
+                            android:id="@+id/fields_details_film_top_sure_button"/>
                     </LinearLayout>
                 </LinearLayout>
 

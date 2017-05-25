@@ -236,8 +236,8 @@ public class FieldsDetailsActivity extends AppCompatActivity {
 
     public void initControls(){
         int k = 0;
-        lampSwitch = (Switch) findViewById(R.id.lamp_switch);
-        lightSwitch = (Switch) findViewById(R.id.light_switch);
+        lampSwitch = (Switch) findViewById(R.id.fields_details_fan_switch);
+        lightSwitch = (Switch) findViewById(R.id.fields_details_light_switch);
         tmembraneSeekBar = (SeekBar) findViewById(R.id.tmembrane_seek_bar);
         nmembraneSeekBar = (SeekBar) findViewById(R.id.nmembrane_seek_bar);
         if (!fieldsDetailsControlsInfoMap.isEmpty()){
