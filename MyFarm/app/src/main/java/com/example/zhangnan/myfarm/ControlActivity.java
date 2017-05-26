@@ -83,7 +83,6 @@ public class ControlActivity extends AppCompatActivity {
         public SoundHodler onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater inflater= LayoutInflater.from(ControlActivity.this);
             View view=inflater.inflate(R.layout.control_list_item,parent,false);
-            //123
             return new SoundHodler(view);
         }
 
