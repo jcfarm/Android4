@@ -30,6 +30,8 @@ public class ControlDetalisActivity extends AppCompatActivity {
     private static final String EXTRA_POSITION="com.example.zhangnan.myfarm.position";
     private int namePosition;
     private TextView controllerTitleTextView;
+
+    public static int Tag;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,9 +111,14 @@ public class ControlDetalisActivity extends AppCompatActivity {
             LayoutInflater inflater= LayoutInflater.from(ControlDetalisActivity.this);
             switch (namePosition){
                 case 0:case 1:case 2:case 3:{
+                    Tag = 0;
                    return new SoundHolder(inflater.inflate(R.layout.control_details_list_item,parent,false));
                 }
-                default:return new SoundHolder(inflater.inflate(R.layout.control_details_list_item2,parent,false));
+                default: {
+                    Tag = 1;
+                    return new SoundHolder(inflater.inflate(R.layout.control_details_list_item2,parent,false));
+                }
+
             }
 
 
@@ -120,21 +127,24 @@ public class ControlDetalisActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final SoundHolder soundHodler, int position) {
             soundHodler.bindHolder(controller,position);
-            if (soundHodler.aSwitch.isChecked()){
-                soundHodler.aSwitch.setText("开");
-            }else{
-                soundHodler.aSwitch.setText("关");
-            }
-            soundHodler.aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked){
-                        soundHodler.aSwitch.setText("开");
-                    }else {
-                        soundHodler.aSwitch.setText("关");
-                    }
+            if (Tag == 0){
+                if (soundHodler.aSwitch.isChecked()){
+                    soundHodler.aSwitch.setText("开");
+                }else{
+                    soundHodler.aSwitch.setText("关");
                 }
-            });
+                soundHodler.aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if (isChecked){
+                            soundHodler.aSwitch.setText("开");
+                        }else {
+                            soundHodler.aSwitch.setText("关");
+                        }
+                    }
+                });
+            }
+
 
         }
 
