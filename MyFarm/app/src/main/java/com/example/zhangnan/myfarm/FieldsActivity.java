@@ -52,6 +52,12 @@ public class FieldsActivity extends AppCompatActivity{
         recyclerView = (RecyclerView) findViewById(R.id.fields_recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(this,1));
         recyclerView.setAdapter(soundAdapter = new SoundAdapter(fieldsInfos));
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                new VisitServer().postJson("{}");
+            }
+        }).start();
     }
 
     private void initSearch(){
