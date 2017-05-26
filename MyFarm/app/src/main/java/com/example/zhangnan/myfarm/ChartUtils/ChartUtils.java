@@ -20,6 +20,7 @@ import java.util.List;
 public class ChartUtils {
 
     public static int dayValue = 0;
+    private static int valuesSize;
 
     /**
      * 初始化图表
@@ -69,7 +70,7 @@ public class ChartUtils {
 
         Matrix matrix = new Matrix();
          //x轴缩放1.5倍
-        matrix.postScale(1.5f, 1f);
+        matrix.postScale(2.0f, 1f);
          //在图表动画显示之前进行缩放
         chart.getViewPortHandler().refresh(matrix, chart, false);
          //x轴执行动画
@@ -132,7 +133,7 @@ public class ChartUtils {
                 return xValuesProcess(valueType)[(int) value];
             }
         });
-
+        valuesSize = values.size();
         chart.invalidate();
         setChartData(chart, values);
     }
@@ -144,12 +145,11 @@ public class ChartUtils {
      * @return x轴数据
      */
     private static String[] xValuesProcess(int valueType) {
-        String[] week = {"周日", "周一", "周二", "周三", "周四", "周五", "周六"};
 
         if (valueType == dayValue) { // 今日
-            String[] dayValues = new String[7];
+            String[] dayValues = new String[valuesSize ];
             long currentTime = System.currentTimeMillis();
-            for (int i = 6; i >= 0; i--) {
+            for (int i = valuesSize - 1 ; i >= 0; i--) {
                 dayValues[i] = TimeUtils.dateToString(currentTime, TimeUtils.dateFormat_day);
                 currentTime -= (3 * 60 * 60 * 1000);
             }

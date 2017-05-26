@@ -15,6 +15,7 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerManager;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 
 /**
@@ -50,11 +51,6 @@ public class MonitorActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapterVideoList);
         recyclerView.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
             @Override
-            public void onChildViewAttachedToWindow(View view) {
-
-            }
-
-            @Override
             public void onChildViewDetachedFromWindow(View view) {
 //                if (JCVideoPlayerManager.getCurrentJcvdOnFirtFloor() != null) {
 //                    JCVideoPlayer videoPlayer = (JCVideoPlayer) JCVideoPlayerManager.getCurrentJcvdOnFirtFloor();
@@ -63,6 +59,12 @@ public class MonitorActivity extends AppCompatActivity {
 //                    }
 //                }
             }
+            @Override
+            public void onChildViewAttachedToWindow(View view) {
+
+            }
+
+
         });
     }
 
@@ -75,15 +77,6 @@ public class MonitorActivity extends AppCompatActivity {
         public RecyclerViewVideoAdapter(Context context) {
             this.context = context;
         }
-
-        @Override
-        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            MyViewHolder holder = new MyViewHolder(LayoutInflater.from(
-                    context).inflate(R.layout.monitor_list_item, parent,
-                    false));
-            return holder;
-        }
-
         @Override
         public void onBindViewHolder(MyViewHolder holder, int position) {
 
@@ -94,12 +87,13 @@ public class MonitorActivity extends AppCompatActivity {
                     .load(VideoConstant.videoThumbs[0][position])
                     .into(holder.jcVideoPlayer.thumbImageView);
         }
-
         @Override
-        public int getItemCount() {
-            return videoIndexs.length;
+        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            MyViewHolder holder = new MyViewHolder(LayoutInflater.from(
+                    context).inflate(R.layout.monitor_list_item, parent,
+                    false));
+            return holder;
         }
-
         class MyViewHolder extends RecyclerView.ViewHolder {
             JCVideoPlayerStandard jcVideoPlayer;
 
@@ -108,6 +102,12 @@ public class MonitorActivity extends AppCompatActivity {
                 jcVideoPlayer = (JCVideoPlayerStandard) itemView.findViewById(R.id.video_player);
             }
         }
+        @Override
+        public int getItemCount() {
+            return videoIndexs.length;
+        }
+
+
     }
 
     @Override
@@ -124,6 +124,12 @@ public class MonitorActivity extends AppCompatActivity {
         JCVideoPlayer.releaseAllVideos();
     }
 
+
+    public static Intent newIntent(Context packageContext){
+        Intent i = new Intent(packageContext,MonitorActivity.class);
+        return i;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -133,10 +139,4 @@ public class MonitorActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-    public static Intent newIntent(Context packageContext){
-        Intent i = new Intent(packageContext,MonitorActivity.class);
-        return i;
-    }
-
 }
