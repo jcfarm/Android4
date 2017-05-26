@@ -10,9 +10,11 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -31,11 +33,13 @@ import com.example.zhangnan.myfarm.activity_information.water;
 import com.example.zhangnan.myfarm.activity_information.web;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
+import com.google.gson.Gson;
 import com.melnykov.fab.FloatingActionButton;
 import com.melnykov.fab.ObservableScrollView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -59,6 +63,9 @@ public class FieldsDetailsActivity extends AppCompatActivity {
     private Intent intentMessage;
     private TextView nameTextView;
     private String fieldsName;
+    private String TGA="FDA";
+    private Button fild_sideButton;
+    private Button fild_topButton;
 
     private FieldsDetailsInfo fieldsDetailsInfo;
     private int fieldsDetailsInfoCount = 0;
@@ -236,6 +243,8 @@ public class FieldsDetailsActivity extends AppCompatActivity {
         lightSwitch = (Switch) findViewById(R.id.fields_details_light_switch);
         tmembraneSeekBar = (SeekBar) findViewById(R.id.tmembrane_seek_bar);
         nmembraneSeekBar = (SeekBar) findViewById(R.id.nmembrane_seek_bar);
+        fild_sideButton=(Button)findViewById(R.id.fields_details_film_side_sure_button);
+        fild_topButton=(Button)findViewById(R.id.fields_details_film_top_sure_button);
         if (!fieldsDetailsControlsInfoMap.isEmpty()){
                 if ((float)fieldsDetailsControlsInfoMap.get(k++) == 1.0f){
                     lampSwitch.setChecked(true);
@@ -254,27 +263,128 @@ public class FieldsDetailsActivity extends AppCompatActivity {
     }
 
     public void changeSwitchText(){
-        lightSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
-                    lightSwitch.setText("开");
-                }else {
-                    lightSwitch.setText("关");
+        final String[] s = new String[1];
+        final String[] t = new String[1];
+            fild_sideButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(fieldsDetailsInfo!=null){
+                    new ControlDetalisActivity().postJsonTask(s[0]);}
                 }
-            }
-        });
+            });
+            fild_topButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(fieldsDetailsInfo!=null){
+                    new ControlDetalisActivity.postJsonTask().execute(t[0]);}
+                }
+            });
+            lightSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                            lightSwitch.setText("开");
+                            if (fieldsDetailsInfo!=null) {
+                            LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
+                            map.put("type", "light");
+                            map.put("target", String.valueOf(fieldsDetailsInfo.getWeb()[0].getId()));
+                            map.put("commond", "1");
+                            String jsonString = new Gson().toJson(map);
+                            Log.d(TGA, "switchClick:" + jsonString);
+                            new ControlDetalisActivity.postJsonTask().execute(jsonString);}
 
-        lampSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
-                    lampSwitch.setText("开");
-                }else {
-                    lampSwitch.setText("关");
+                    } else {
+                            lightSwitch.setText("关");
+                            if (fieldsDetailsInfo!=null) {
+                            LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
+                            map.put("type", "light");
+                            map.put("target", String.valueOf(fieldsDetailsInfo.getWeb()[0].getId()));
+                            map.put("commond", "0");
+                            String jsonString = new Gson().toJson(map);
+                            Log.d(TGA, "switchClick:" + jsonString);
+                            new ControlDetalisActivity.postJsonTask().execute(jsonString);}
+                    }
+
+                }});
+            lampSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        lampSwitch.setText("开");
+                        if (fieldsDetailsInfo!=null) {
+                            LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
+                            map.put("type", "draught_fan");
+                            map.put("target", String.valueOf(fieldsDetailsInfo.getLamp()[0].getId()));
+                            map.put("commond", "1");
+                            String jsonString = new Gson().toJson(map);
+                            Log.d(TGA, "switchClick:" + jsonString);
+                            new ControlDetalisActivity.postJsonTask().execute(jsonString);}
+
+                    } else {
+                        lampSwitch.setText("关");
+                        if (fieldsDetailsInfo!=null) {
+                            LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
+                            map.put("type", "draught_fan");
+                            map.put("target", String.valueOf(fieldsDetailsInfo.getLamp()[0].getId()));
+                            map.put("commond", "0");
+                            String jsonString = new Gson().toJson(map);
+                            Log.d(TGA, "switchClick:" + jsonString);
+                            new ControlDetalisActivity.postJsonTask().execute(jsonString);}
+                    }
+
+                }});
+            tmembraneSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
                 }
-            }
-        });
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                    if(fieldsDetailsInfo!=null){
+                        LinkedHashMap<String,String>map=new LinkedHashMap<String,String>();
+                        map.put("type","film_side");
+                        map.put("target", String.valueOf(fieldsDetailsInfo.getTmembrane()[0].getId()));
+                        map.put("commond", String.valueOf(seekBar.getProgress()));
+                        s[0] =new Gson().toJson(map);
+                        Log.d(TGA, "onProgressChanged: "+ s[0]);
+                        }
+                }
+            });
+            nmembraneSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                    if(fieldsDetailsInfo!=null){
+                        LinkedHashMap<String,String>map=new LinkedHashMap<String,String>();
+                        map.put("type","film_top");
+                        map.put("target", String.valueOf(fieldsDetailsInfo.getNmembrane()[0].getId()));
+                        map.put("commond", String.valueOf(seekBar.getProgress()));
+                        t[0] =new Gson().toJson(map);
+                        Log.d(TGA, "onProgressChanged: "+t);
+                        }
+                }
+            });
+
+            //new ControlDetalisActivity().switchClick(lightSwitch,fieldsDetailsInfo.getWeb()[0].getId(),"light");
+            //new ControlDetalisActivity().switchClick(lampSwitch,fieldsDetailsInfo.getWeb()[0].getId(),"draught");
+
+
+
     }
 
 
@@ -357,6 +467,7 @@ public class FieldsDetailsActivity extends AppCompatActivity {
         }
 
     }
+
 
 }
 
