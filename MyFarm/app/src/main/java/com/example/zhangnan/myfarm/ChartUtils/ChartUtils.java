@@ -1,6 +1,7 @@
 package com.example.zhangnan.myfarm.ChartUtils;
 
 import android.graphics.Color;
+import android.graphics.Matrix;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -52,7 +53,7 @@ public class ChartUtils {
         xAxis.setTextSize(12);
         xAxis.setGridColor(Color.parseColor("#00000000"));
         // 设置x轴数据偏移量
-        xAxis.setYOffset(-12);
+        //xAxis.setYOffset(-12);
 
         YAxis yAxis = chart.getAxisLeft();
         // 不显示y轴
@@ -64,18 +65,18 @@ public class ChartUtils {
         yAxis.setTextColor(Color.parseColor("#4CAF50"));
         yAxis.setTextSize(12);
         // 设置y轴数据偏移量
-        yAxis.setXOffset(30);
-        yAxis.setYOffset(-3);
+       yAxis.setXOffset(30);
+//        yAxis.setYOffset(-3);
         yAxis.setAxisMinimum(0);
 
-        //Matrix matrix = new Matrix();
-        // x轴缩放1.5倍
-        //matrix.postScale(1.5f, 1f);
-        // 在图表动画显示之前进行缩放
-        //chart.getViewPortHandler().refresh(matrix, chart, false);
-        // x轴执行动画
-        //chart.animateX(2000);
-        chart.invalidate();
+//        Matrix matrix = new Matrix();
+//         //x轴缩放1.5倍
+//        matrix.postScale(1.5f, 1f);
+//         //在图表动画显示之前进行缩放
+//        chart.getViewPortHandler().refresh(matrix, chart, false);
+//         //x轴执行动画
+//        chart.animateX(2000);
+//        chart.invalidate();
         return chart;
     }
 

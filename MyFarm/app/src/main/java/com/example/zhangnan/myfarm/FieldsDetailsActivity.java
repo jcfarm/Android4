@@ -108,12 +108,12 @@ public class FieldsDetailsActivity extends AppCompatActivity {
 
     private List<Entry> getData() {
         List<Entry> values = new ArrayList<>();
-        values.add(new Entry(0, 15));
-        values.add(new Entry(1, 15));
+        values.add(new Entry(0, 13));
+        values.add(new Entry(1, 14));
         values.add(new Entry(2, 15));
-        values.add(new Entry(3, 20));
+        values.add(new Entry(3, 30));
         values.add(new Entry(4, 25));
-        values.add(new Entry(5, 20));
+        values.add(new Entry(5, 1));
         values.add(new Entry(6, 20));
         return values;
     }
