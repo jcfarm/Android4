@@ -50,7 +50,7 @@ public class MyFarmActivity extends AppCompatActivity {
             R.drawable.huanjing,
             R.drawable.shuju,
             R.drawable.shezhi,
-            R.drawable.image_1
+            R.drawable.shuju
     };
 
     private Intent i;

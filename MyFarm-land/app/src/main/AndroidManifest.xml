@@ -20,7 +20,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".MyFarmActivity" />
-        <activity android:name=".ControlDetalisActivity" />
         <activity android:name=".MonitorActivity" />
 
     </application>
