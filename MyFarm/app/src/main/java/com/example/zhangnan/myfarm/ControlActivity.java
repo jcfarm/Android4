@@ -22,16 +22,16 @@ import android.widget.TextView;
 public class ControlActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    public String[] name = {"水泵","环流机","照明灯","遮阳网","侧卷膜","顶卷膜"};
+    public String[] name = {"水泵","环流水机","照明灯","遮阳网","侧卷膜","顶卷膜"};
     public int[] image = {
             R.drawable.shuibeng,
-            R.drawable.shuibeng,
-            R.drawable.shuibeng,
-            R.drawable.shuibeng,
-            R.drawable.shuibeng,
-            R.drawable.shuibeng,
+            R.drawable.huanjing,
+            R.drawable.zhaoming,
+            R.drawable.mo,
+            R.drawable.cejuanmo,
+            R.drawable.cejuanmo,
     };
-    private SoundAdapter soundAdapter;
+    private SoundAdapter soundAdapter;//唐靖修改
     private String TAG="ControlActivity";//Tag凌锐修改
     private Intent i;
 
