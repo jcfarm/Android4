@@ -42,41 +42,39 @@ public class ChartUtils {
         Legend legend = chart.getLegend();
         legend.setEnabled(false);
         // 向左偏移15dp，抵消y轴向右偏移的30dp
-        chart.setExtraLeftOffset(-15);
+        //chart.setExtraLeftOffset(-15);
 
         XAxis xAxis = chart.getXAxis();
-        // 不显示x轴
-        xAxis.setDrawAxisLine(false);
+        //显示x轴
+        xAxis.setDrawAxisLine(true);
         // 设置x轴数据的位置
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setTextColor(Color.parseColor("#4CAF50"));
         xAxis.setTextSize(12);
         xAxis.setGridColor(Color.parseColor("#00000000"));
-        // 设置x轴数据偏移量
+        // 设置x轴数据偏移量无
         //xAxis.setYOffset(-12);
 
         YAxis yAxis = chart.getAxisLeft();
-        // 不显示y轴
-        yAxis.setDrawAxisLine(false);
-        // 设置y轴数据的位置
+        //显示y轴
+        yAxis.setDrawAxisLine(true);
+        //设置y轴数据的位置
         yAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
-        // 不从y轴发出横向直线
-        yAxis.setDrawGridLines(false);
+        //从y轴发出横向直线
+        yAxis.setDrawGridLines(true);
+        yAxis.setGridColor(Color.parseColor("#e0e0e0"));
         yAxis.setTextColor(Color.parseColor("#4CAF50"));
         yAxis.setTextSize(12);
-        // 设置y轴数据偏移量
-       yAxis.setXOffset(30);
-//        yAxis.setYOffset(-3);
-        yAxis.setAxisMinimum(0);
+        // 设置y轴数据偏移量无
 
-//        Matrix matrix = new Matrix();
-//         //x轴缩放1.5倍
-//        matrix.postScale(1.5f, 1f);
-//         //在图表动画显示之前进行缩放
-//        chart.getViewPortHandler().refresh(matrix, chart, false);
-//         //x轴执行动画
-//        chart.animateX(2000);
-//        chart.invalidate();
+        Matrix matrix = new Matrix();
+         //x轴缩放1.5倍
+        matrix.postScale(1.5f, 1f);
+         //在图表动画显示之前进行缩放
+        chart.getViewPortHandler().refresh(matrix, chart, false);
+         //x轴执行动画
+        chart.animateX(2000);
+        chart.invalidate();
         return chart;
     }
 
@@ -96,16 +94,22 @@ public class ChartUtils {
             chart.notifyDataSetChanged();
         } else {
             lineDataSet = new LineDataSet(values, "");
-            // 设置曲线颜色
+            //设置曲线颜色
             lineDataSet.setColor(Color.parseColor("#000000"));
-            // 设置平滑曲线
+            //设置平滑曲线
             lineDataSet.setMode(LineDataSet.Mode.LINEAR);
-            // 不显示坐标点的小圆点
-            lineDataSet.setDrawCircles(false);
-            // 不显示坐标点的数据
-            lineDataSet.setDrawValues(false);
-            // 不显示定位线
-            lineDataSet.setHighlightEnabled(false);
+            //显示坐标点的小圆点
+            lineDataSet.setDrawCircles(true);
+            //设置小圆点颜色
+            lineDataSet.setCircleColor(Color.parseColor("#4CAF50"));
+            //设置小圆点大小
+            lineDataSet.setCircleRadius(5.0f);
+            //显示坐标点的数据
+            lineDataSet.setDrawValues(true);
+            //设置坐标点数据字体大小
+            lineDataSet.setValueTextSize(10);
+            //显示定位线
+            lineDataSet.setHighlightEnabled(true);
 
             LineData data = new LineData(lineDataSet);
             chart.setData(data);
