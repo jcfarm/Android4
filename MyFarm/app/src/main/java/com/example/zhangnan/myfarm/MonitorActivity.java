@@ -15,6 +15,7 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerManager;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 
 /**
@@ -51,12 +52,12 @@ public class MonitorActivity extends AppCompatActivity {
         recyclerView.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
             @Override
             public void onChildViewDetachedFromWindow(View view) {
-                if (JCVideoPlayerManager.getCurrentJcvdOnFirtFloor() != null) {
-                    JCVideoPlayer videoPlayer = (JCVideoPlayer) JCVideoPlayerManager.getCurrentJcvdOnFirtFloor();
-                    if (((ViewGroup) view).indexOfChild(videoPlayer) != -1 && videoPlayer.currentState == JCVideoPlayer.CURRENT_STATE_PLAYING) {
-                        JCVideoPlayer.releaseAllVideos();
-                    }
-                }
+//                if (JCVideoPlayerManager.getCurrentJcvdOnFirtFloor() != null) {
+//                    JCVideoPlayer videoPlayer = (JCVideoPlayer) JCVideoPlayerManager.getCurrentJcvdOnFirtFloor();
+//                    if (((ViewGroup) view).indexOfChild(videoPlayer) != -1 && videoPlayer.currentState == JCVideoPlayer.CURRENT_STATE_PLAYING) {
+//                        JCVideoPlayer.releaseAllVideos();
+//                    }
+//                }
             }
             @Override
             public void onChildViewAttachedToWindow(View view) {
