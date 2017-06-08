@@ -35,38 +35,35 @@ import java.util.concurrent.TimeUnit;
 
 public class MqttMessages{
 
-    private String host = "tcp://10.0.2.2:1883";
-    private Handler handler;
-    private MqttClient client;
-    private String myTopic = "fields";
-    private MqttConnectOptions options;
-    private ScheduledExecutorService scheduler;
-    private String[] name ={"light","co2","water","salt"};
+    private String host = "tcp://10.0.2.2:1883";//连接服务地址
+    private Handler handler;//分发Message对象
+    private MqttClient client;//MQTT客户端
+    private String myTopic = "fields";//订阅主题
+    private MqttConnectOptions options;//连接设置
+    private ScheduledExecutorService scheduler;//定时
+    private String[] name ={"light","co2","water","salt"};//JSON键名数组
 
+    //解析存储的JavaBean和Map
     public static Map<Integer,FieldsDetailsInfo> messageMap = new HashMap();
-
     private FieldsDetailsInfo fieldsDetailsInfo = new FieldsDetailsInfo();
 
     public void getMessages(){
         init();
         handler = new Handler() {
                 @Override
-                public void handleMessage(Message msg) {
+                public void handleMessage(Message msg) {//接收Message
                     super.handleMessage(msg);
                     if(msg.what == 1) {
 
                         String mqttInfo = msg.obj.toString();
                         if (mqttInfo == null){
-
                         }else {
                             parserJson(mqttInfo);
                         }
-
-
                     } else if(msg.what == 2) {
 
                         try {
-                            client.subscribe(myTopic, 1);
+                            client.subscribe(myTopic, 1);//订阅主题关键词
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -94,6 +91,7 @@ public class MqttMessages{
 
     private void init() {
         try {
+
             client = new MqttClient(host, "test", new MemoryPersistence());
             options = new MqttConnectOptions();
             options.setCleanSession(true);
@@ -117,7 +115,7 @@ public class MqttMessages{
                 @Override
                 public void messageArrived(String topicName, MqttMessage message)
                         throws Exception {
-                    //subscribe
+                    //接收返回消息message和handler分发
                     System.out.println("messageArrived----------");
                     Message msg = new Message();
                     msg.what = 1;
@@ -161,17 +159,19 @@ public class MqttMessages{
         }
     }
 
+    //JSON解析
     private  void parserJson(final String j) {
 
         JSONObject jsonObject = JSON.parseObject(j);
-        getFieldId(jsonObject);
-        getSensors(jsonObject);
-        getControls(jsonObject);
-        messageMap.put(fieldsDetailsInfo.getId(),fieldsDetailsInfo);
+        getFieldId(jsonObject);//获取田地id
+        getSensors(jsonObject);//解析传感器数据
+        getControls(jsonObject);//解析控制器数据
+        messageMap.put(fieldsDetailsInfo.getId(),fieldsDetailsInfo);//将田地信息JavaBean存入Map
 
     }
 
     private void getSensors(JSONObject jsonObject){
+        //解析Sensors
         JSONArray sensors =jsonObject.getJSONArray("sensors");
         if(sensors != null){
             for (int i = 0; i < sensors.size(); i++) {
@@ -184,6 +184,7 @@ public class MqttMessages{
                         fieldsDetailsInfo.setLight(ls);
                     }
                 }
+        //下面继续解析
 
                 if (i == 1) {
                     JSONArray sensor = sensors.getJSONObject(i).getJSONArray(name[i]);
