@@ -106,14 +106,29 @@ public class FieldsDetailsInfo {
         this.web = web;
     }
 
-    public int getCount() {
-        return Count;
-    }
+    public int getSensorsCount() {
 
-    public void setCount(int count) {
-        Count = blower.length+co2.length+lamp.length
-                +light.length+nmembrane.length+pump.length
-                + salt.length+tmembrane.length
-                + water.length+web.length;
+        int count = 0 ;
+        if (co2 != null){
+            int co = co2.length;
+            count+=co;
+        }
+        if (light != null){
+            int li = light.length;
+            count+=li;
+        }
+
+        if (salt != null){
+            int sa = salt.length;
+            count+=sa;
+        }
+
+        if (water != null){
+            int wa = water.length;
+            count+=wa;
+        }
+
+
+        return count;
     }
 }

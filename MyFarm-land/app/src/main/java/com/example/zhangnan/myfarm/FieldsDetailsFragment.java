@@ -282,6 +282,7 @@ public class FieldsDetailsFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        mQttMessages.close();
     }
 
 
@@ -315,8 +316,8 @@ public class FieldsDetailsFragment extends Fragment {
 
             for (int i = 0;i < mFieldsDetailsInfo.getSalt().length;i++){
                 salt[] s = mFieldsDetailsInfo.getSalt();
-                fieldsDetailsSensorsInfoMap.put(k++,"电导率："+String.valueOf(s[i].getMg()+'\n'+
-                        "盐分"+s[i].getUs()));
+                fieldsDetailsSensorsInfoMap.put(k++,"电导率："+String.valueOf(s[i].getMg())+'\n'+
+                        "盐分"+s[i].getUs());
             }
 
         }

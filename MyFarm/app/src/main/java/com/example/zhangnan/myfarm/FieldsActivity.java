@@ -41,6 +41,8 @@ public class FieldsActivity extends AppCompatActivity{
     private Map<String,String> mqttMessagesMap = new HashMap<>();
     private SoundAdapter soundAdapter;
     private List<FieldsInfo> fieldsInfos=new ArrayList<>();
+    public static int clickItemPosition;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,22 +97,13 @@ public class FieldsActivity extends AppCompatActivity{
 
         @Override
         public void onClick(View view) {
-            if (!MqttMessages.messageMap.isEmpty()){
-                i = FieldsDetailsActivity.newIntent(FieldsActivity.this);
-                Bundle bundle = new Bundle();
-                bundle.putString("name","hello");
-                bundle.putInt("position",getPosition()+1);
-                i.putExtras(bundle);
-                startActivity(i);
-            }else {
+                clickItemPosition = getPosition() + 1;
                 i = FieldsDetailsActivity.newIntent(FieldsActivity.this);
                 Bundle bundle = new Bundle();
                 bundle.putString("name", (String) fieldNameTextView.getText());
                 bundle.putInt("position",getPosition()+1);
                 i.putExtras(bundle);
                 startActivity(i);
-            }
-
         }
     }
 
