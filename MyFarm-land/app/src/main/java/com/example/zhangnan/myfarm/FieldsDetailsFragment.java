@@ -63,7 +63,7 @@ public class FieldsDetailsFragment extends Fragment {
 
         //订阅当前田地详情主题
         mQttMessages = new MqttMessages("fields"+String.valueOf(FieldsFragment.clickItemPosition));
-        count = MqttMessages.fieldsDetailsInfo.getCount();
+        count = MqttMessages.fieldsDetailsInfo.getSensorsCount();
         Log.d("topic","fields"+String.valueOf(FieldsFragment.clickItemPosition));
 
         MqttMessages.updateUIHandler = new Handler(){

@@ -334,7 +334,7 @@ public class MqttMessages{
             public void run() {
                 Message updateUIMessage = new Message();
                 updateUIMessage.what =1;
-                updateUIMessage.obj = fieldsDetailsInfo.getCount();
+                updateUIMessage.obj = fieldsDetailsInfo.getSensorsCount();
                 updateUIHandler.sendMessage(updateUIMessage);
             }
         }).start();
