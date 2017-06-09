@@ -23,6 +23,10 @@ import android.widget.Switch;
 import android.widget.TextView;
 import com.example.zhangnan.myfarm.ChartUtils.ChartUtils;
 import com.example.zhangnan.myfarm.activity_information.FieldsDetailsInfo;
+import com.example.zhangnan.myfarm.activity_information.co2;
+import com.example.zhangnan.myfarm.activity_information.light;
+import com.example.zhangnan.myfarm.activity_information.salt;
+import com.example.zhangnan.myfarm.activity_information.water;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.melnykov.fab.FloatingActionButton;
@@ -56,6 +60,7 @@ public class FieldsDetailsFragment extends Fragment {
 
     private FieldsDetailsInfo mFieldsDetailsInfo;
     private int count;
+    public Map<Integer, String> fieldsDetailsSensorsInfoMap = new HashMap();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,7 +76,8 @@ public class FieldsDetailsFragment extends Fragment {
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 if (msg.what == 1){
-                    count = (int) msg.obj;
+                    mFieldsDetailsInfo = (FieldsDetailsInfo) msg.obj;
+                    count = mFieldsDetailsInfo.getSensorsCount();
                     updateData();
                     Log.d("count", String.valueOf(count));
                 }
@@ -142,6 +148,7 @@ public class FieldsDetailsFragment extends Fragment {
         public void onBindViewHolder(FieldsDetailsHodler fieldsDetailsHodler, int position) {
             fieldsDetailsHodler.sensorsDetailsTextView.setTextSize(15);
             fieldsDetailsHodler.sensorsDetailsTextView.setTextColor(Color.parseColor("#000000"));
+            fieldsDetailsHodler.sensorsDetailsTextView.setText(fieldsDetailsSensorsInfoMap.get(position));
         }
 
         @Override
@@ -279,7 +286,41 @@ public class FieldsDetailsFragment extends Fragment {
 
 
     private void updateData(){
+        fieldsDetailsSensorsInfoToString();
         fieldsDetailsAdapter.notifyDataSetChanged();
+    }
+
+    private void fieldsDetailsSensorsInfoToString(){
+        if (mFieldsDetailsInfo != null){
+            int k = 0;
+            for (int i = 0;i < mFieldsDetailsInfo.getLight().length;i++){
+                light[] l = mFieldsDetailsInfo.getLight();
+                fieldsDetailsSensorsInfoMap.put(k++,"温度："+String.valueOf(l[i].getC())+'\n'+
+                        "酸碱度："+String.valueOf(l[i].getPh())+'\n'+
+                        "光照强度："+String.valueOf(l[i].getLux()));
+            }
+
+            for (int i = 0;i < mFieldsDetailsInfo.getCo2().length;i++){
+                co2[] c = mFieldsDetailsInfo.getCo2();
+                fieldsDetailsSensorsInfoMap.put(k++,"温度："+String.valueOf(c[i].getC())+'\n'+
+                        "酸碱度："+String.valueOf(c[i].getPh())+'\n'+
+                        "二氧化碳浓度："+String.valueOf(c[i].getCo2()));
+            }
+
+            for (int i = 0;i < mFieldsDetailsInfo.getWater().length;i++){
+                water[] w = mFieldsDetailsInfo.getWater();
+                fieldsDetailsSensorsInfoMap.put(k++,"温度："+String.valueOf(w[i].getC())+'\n'+
+                        "湿度："+String.valueOf(w[i].getPe()));
+            }
+
+            for (int i = 0;i < mFieldsDetailsInfo.getSalt().length;i++){
+                salt[] s = mFieldsDetailsInfo.getSalt();
+                fieldsDetailsSensorsInfoMap.put(k++,"电导率："+String.valueOf(s[i].getMg()+'\n'+
+                        "盐分"+s[i].getUs()));
+            }
+
+        }
+
     }
 }
 

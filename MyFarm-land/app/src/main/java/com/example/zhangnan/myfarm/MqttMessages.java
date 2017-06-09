@@ -332,9 +332,9 @@ public class MqttMessages{
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Message updateUIMessage = new Message();
+                Message updateUIMessage= new Message();
                 updateUIMessage.what =1;
-                updateUIMessage.obj = fieldsDetailsInfo.getSensorsCount();
+                updateUIMessage.obj = fieldsDetailsInfo;
                 updateUIHandler.sendMessage(updateUIMessage);
             }
         }).start();
