@@ -107,9 +107,49 @@ public class FieldsDetailsInfo {
     }
 
     public int getCount() {
-        return blower.length+co2.length+lamp.length
-                +light.length+nmembrane.length+pump.length
-                + salt.length+tmembrane.length
-                + water.length+web.length;
+
+        int count = 0 ;
+        if (blower != null){
+            int bl = blower.length;
+            count+=bl;
+        }
+        if (co2 != null){
+            int co = co2.length;
+            count+=co;
+        }
+        if (lamp != null){
+            int la = lamp.length;
+            count+=la;
+        }
+        if (light != null){
+            int li = light.length;
+            count+=li;
+        }
+        if (nmembrane != null){
+            int nm = nmembrane.length;
+            count+=nm;
+        }
+        if (pump != null){
+            int pu = pump.length;
+            count+=pu;
+        }
+        if (salt != null){
+            int sa = salt.length;
+            count+=sa;
+        }
+        if (tmembrane != null){
+            int tm = tmembrane.length;
+            count+=tm;
+        }
+        if (water != null){
+            int wa = water.length;
+            count+=wa;
+        }
+        if (web != null){
+            int we = web.length;
+            count+=we;
+        }
+
+        return count;
     }
 }

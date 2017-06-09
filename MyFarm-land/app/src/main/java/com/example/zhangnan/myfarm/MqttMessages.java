@@ -47,15 +47,8 @@ public class MqttMessages{
     private ScheduledExecutorService scheduler;
     private String[] name ={"light","co2","water","salt"};
 
-    public static Handler sendFieldsDetailsInfoHandler;
-    public  Message fieldsDetailsMsg = new Message();
-
-    private static FieldsDetailsInfo fieldsDetailsInfo = new FieldsDetailsInfo();
-
-    public  Map<Integer, String> fieldsDetailsSensorsInfoMap = new HashMap();
-    public  Map<Integer, Float> fieldsDetailsControlsInfoMap = new HashMap();
-
-    public static int fieldsDetailsInfoCount = 0;
+    //田地所有传感器数据JavaBean
+    public static FieldsDetailsInfo fieldsDetailsInfo = new FieldsDetailsInfo();
 
     public MqttMessages(String myTopic){
         this.myTopic =myTopic;
@@ -183,23 +176,6 @@ public class MqttMessages{
         getFieldId(jsonObject);
         getSensors(jsonObject);
         getControls(jsonObject);
-
-        fieldsDetailsSensorsInfoToString();
-        fieldsDetailsControlInfoToString();
-        fieldsDetailsInfoCount = fieldsDetailsSensorsInfoMap.size();
-        Log.d("size",String.valueOf(fieldsDetailsSensorsInfoMap.size()));
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                fieldsDetailsMsg.what = fieldsDetailsInfoCount;
-                fieldsDetailsMsg.obj = fieldsDetailsSensorsInfoMap;
-                Log.d("*************", fieldsDetailsSensorsInfoMap.get(0));
-                sendFieldsDetailsInfoHandler.sendMessage(fieldsDetailsMsg);
-            }
-        }).start();
-
-
 
     }
 
@@ -349,72 +325,5 @@ public class MqttMessages{
         fieldsDetailsInfo.setId(jsonObject.getInteger("id"));
     }
 
-    //将FieldsDetailsInfo对象中的sensor元素的每个数组以String存放在fieldsDetailsSensorsInfoMap中
-    private void fieldsDetailsSensorsInfoToString(){
-
-        if (fieldsDetailsInfo != null){
-            int k = 0;
-            light[] l = fieldsDetailsInfo.getLight();
-            for (int i = 0;i < fieldsDetailsInfo.getLight().length;i++){
-                fieldsDetailsSensorsInfoMap.put(k++,String.valueOf(l[i].getC())+
-                        String.valueOf(l[i].getLux())+
-                        String.valueOf(l[i].getPh()));
-            }
-            Log.d("info",fieldsDetailsSensorsInfoMap.get(1));
-
-            co2[] c = fieldsDetailsInfo.getCo2();
-            for (int i = 0;i < fieldsDetailsInfo.getCo2().length;i++){
-                fieldsDetailsSensorsInfoMap.put(k++,String.valueOf(c[i].getC())+
-                        String.valueOf(c[i].getCo2())+
-                        String.valueOf(c[i].getPh()));
-            }
-
-            water[] w = fieldsDetailsInfo.getWater();
-            for (int i = 0;i < fieldsDetailsInfo.getWater().length;i++){
-                fieldsDetailsSensorsInfoMap.put(k++,String.valueOf(w[i].getC())+
-                        String.valueOf(w[i].getPe()));
-            }
-
-            salt[] s = fieldsDetailsInfo.getSalt();
-            for (int i = 0;i < fieldsDetailsInfo.getSalt().length;i++){
-                fieldsDetailsSensorsInfoMap.put(k++,String.valueOf(s[i].getMg()+
-                        s[i].getUs()));
-            }
-
-        }
-
-    }
-
-    //同上
-    private void fieldsDetailsControlInfoToString(){
-
-        if (fieldsDetailsInfo != null){
-            int k = 0;
-
-            lamp[] l = fieldsDetailsInfo.getLamp();
-            for (int i = 0;i < fieldsDetailsInfo.getLamp().length;i++){
-
-                fieldsDetailsControlsInfoMap.put(k++, (float) l[i].getValue());
-            }
-
-            web[] w = fieldsDetailsInfo.getWeb();
-            for (int i = 0;i < fieldsDetailsInfo.getWeb().length;i++){
-
-                fieldsDetailsControlsInfoMap.put(k++, (float) w[i].getValue());
-            }
-
-            nmembrane[] n = fieldsDetailsInfo.getNmembrane();
-            for (int i = 0;i < fieldsDetailsInfo.getNmembrane().length;i++){
-
-                fieldsDetailsControlsInfoMap.put(k++,n[i].getValue());
-            }
-
-            tmembrane[] t = fieldsDetailsInfo.getTmembrane();
-            for (int i = 0;i < fieldsDetailsInfo.getTmembrane().length;i++){
-                fieldsDetailsControlsInfoMap.put(k++,t[i].getValue());
-            }
-        }
-
-    }
 
 }

@@ -52,16 +52,15 @@ public class FieldsDetailsFragment extends Fragment {
     private MqttMessages mQttMessages;
     private RecyclerView.Adapter fieldsDetailsAdapter;
     private Map<Integer, String> fieldsDetailsSensorsInfoMap = new HashMap();
-    private int count = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_fields_details, container, false);
 
+        //订阅当前田地详情主题
         mQttMessages = new MqttMessages("fields"+String.valueOf(FieldsFragment.clickItemPosition));
         Log.d("topic","fields"+String.valueOf(FieldsFragment.clickItemPosition));
-        getMessages();
 
         imgIdArray = new int[]{R.drawable.img1, R.drawable.img2, R.drawable.img3,R.drawable.img4,R.drawable.img5};
         mImageViews = new ImageView[imgIdArray.length];
@@ -75,14 +74,8 @@ public class FieldsDetailsFragment extends Fragment {
         fieldsDetailsRecyclerView = (RecyclerView)view.findViewById(R.id.fields_details_recycler_view);
         fieldsDetailsRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
         fieldsDetailsRecyclerView.addItemDecoration(new MyFieldsDetailsItemDecoration(5));
-
-        if (fieldsDetailsAdapter == null) {
-            fieldsDetailsAdapter = new FieldsDetailsAdapter();
-            fieldsDetailsRecyclerView.setAdapter(fieldsDetailsAdapter);
-        } else {
-            fieldsDetailsAdapter.notifyDataSetChanged();
-        }
-
+        fieldsDetailsRecyclerView.setAdapter(fieldsDetailsAdapter = new FieldsDetailsAdapter());
+        fieldsDetailsAdapter.notifyDataSetChanged();
 
 
         viewPager_banner = (ViewPager) view.findViewById(R.id.fields_list_item_view_pager_banner);
@@ -141,7 +134,7 @@ public class FieldsDetailsFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return count;
+            return MqttMessages.fieldsDetailsInfo.getCount();
         }
     }
 
@@ -270,24 +263,6 @@ public class FieldsDetailsFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        fieldsDetailsSensorsInfoMap.clear();
-        MqttMessages.fieldsDetailsInfoCount=0;
-    }
-
-
-
-    private void getMessages(){
-        MqttMessages.sendFieldsDetailsInfoHandler = new Handler(){
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                if(msg.what == 1) {
-                    count = msg.what;
-                    fieldsDetailsSensorsInfoMap = (Map<Integer, String>) msg.obj;
-                    Log.d("*************", fieldsDetailsSensorsInfoMap.get(0));
-                }
-            }
-        };
     }
 
 }
