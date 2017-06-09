@@ -107,11 +107,7 @@ public class FieldsDetailsInfo {
     }
 
     public int getCount() {
-        return Count;
-    }
-
-    public void setCount(int count) {
-        Count = blower.length+co2.length+lamp.length
+        return blower.length+co2.length+lamp.length
                 +light.length+nmembrane.length+pump.length
                 + salt.length+tmembrane.length
                 + water.length+web.length;
