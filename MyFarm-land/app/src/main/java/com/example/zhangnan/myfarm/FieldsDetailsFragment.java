@@ -7,6 +7,7 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
@@ -21,6 +22,7 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import com.example.zhangnan.myfarm.ChartUtils.ChartUtils;
+import com.example.zhangnan.myfarm.activity_information.FieldsDetailsInfo;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.melnykov.fab.FloatingActionButton;
@@ -51,16 +53,36 @@ public class FieldsDetailsFragment extends Fragment {
 
     private MqttMessages mQttMessages;
     private RecyclerView.Adapter fieldsDetailsAdapter;
-    private Map<Integer, String> fieldsDetailsSensorsInfoMap = new HashMap();
+
+    private FieldsDetailsInfo mFieldsDetailsInfo;
+    private int count;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        //订阅当前田地详情主题
+        mQttMessages = new MqttMessages("fields"+String.valueOf(FieldsFragment.clickItemPosition));
+        count = MqttMessages.fieldsDetailsInfo.getCount();
+        Log.d("topic","fields"+String.valueOf(FieldsFragment.clickItemPosition));
+
+        MqttMessages.updateUIHandler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                if (msg.what == 1){
+                    count = (int) msg.obj;
+                    updateData();
+                    Log.d("count", String.valueOf(count));
+                }
+            }
+        };
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_fields_details, container, false);
-
-        //订阅当前田地详情主题
-        mQttMessages = new MqttMessages("fields"+String.valueOf(FieldsFragment.clickItemPosition));
-        Log.d("topic","fields"+String.valueOf(FieldsFragment.clickItemPosition));
 
         imgIdArray = new int[]{R.drawable.img1, R.drawable.img2, R.drawable.img3,R.drawable.img4,R.drawable.img5};
         mImageViews = new ImageView[imgIdArray.length];
@@ -71,11 +93,13 @@ public class FieldsDetailsFragment extends Fragment {
 
         }
 
+        System.out.println("***********************"+count);
+
         fieldsDetailsRecyclerView = (RecyclerView)view.findViewById(R.id.fields_details_recycler_view);
         fieldsDetailsRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
         fieldsDetailsRecyclerView.addItemDecoration(new MyFieldsDetailsItemDecoration(5));
         fieldsDetailsRecyclerView.setAdapter(fieldsDetailsAdapter = new FieldsDetailsAdapter());
-        fieldsDetailsAdapter.notifyDataSetChanged();
+
 
 
         viewPager_banner = (ViewPager) view.findViewById(R.id.fields_list_item_view_pager_banner);
@@ -107,9 +131,6 @@ public class FieldsDetailsFragment extends Fragment {
 
     private class FieldsDetailsAdapter extends RecyclerView.Adapter<FieldsDetailsHodler>{
 
-        private FieldsDetailsAdapter(){
-
-        }
 
         @Override
         public FieldsDetailsHodler onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -119,22 +140,13 @@ public class FieldsDetailsFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(FieldsDetailsHodler fieldsDetailsHodler, int position) {
-            if (fieldsDetailsSensorsInfoMap.isEmpty()){
-
-            }
-
-            //从fieldsDetailsSensorsInfoMap取出值给每一个item更新数据
-            if (!fieldsDetailsSensorsInfoMap.isEmpty()) {
-                fieldsDetailsHodler.sensorsDetailsTextView.setTextSize(15);
-                fieldsDetailsHodler.sensorsDetailsTextView.setTextColor(Color.parseColor("#000000"));
-                fieldsDetailsHodler.sensorsDetailsTextView.setText(fieldsDetailsSensorsInfoMap.get(position));
-            }
-
+            fieldsDetailsHodler.sensorsDetailsTextView.setTextSize(15);
+            fieldsDetailsHodler.sensorsDetailsTextView.setTextColor(Color.parseColor("#000000"));
         }
 
         @Override
         public int getItemCount() {
-            return MqttMessages.fieldsDetailsInfo.getCount();
+            return count;
         }
     }
 
@@ -265,6 +277,10 @@ public class FieldsDetailsFragment extends Fragment {
         super.onDestroyView();
     }
 
+
+    private void updateData(){
+        fieldsDetailsAdapter.notifyDataSetChanged();
+    }
 }
 
 

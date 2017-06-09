@@ -50,6 +50,8 @@ public class MqttMessages{
     //田地所有传感器数据JavaBean
     public static FieldsDetailsInfo fieldsDetailsInfo = new FieldsDetailsInfo();
 
+    public static Handler updateUIHandler;
+
     public MqttMessages(String myTopic){
         this.myTopic =myTopic;
         init();
@@ -69,6 +71,7 @@ public class MqttMessages{
                         Log.d("json",mqttInfo);
                         if (mqttInfo.length() != 0){
                             parserJson(mqttInfo);
+                            sendMessages();
                         }
 
 
@@ -323,6 +326,19 @@ public class MqttMessages{
 
     private  void getFieldId(JSONObject jsonObject){
         fieldsDetailsInfo.setId(jsonObject.getInteger("id"));
+    }
+
+    private void sendMessages(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Message updateUIMessage = new Message();
+                updateUIMessage.what =1;
+                updateUIMessage.obj = fieldsDetailsInfo.getCount();
+                updateUIHandler.sendMessage(updateUIMessage);
+            }
+        }).start();
+
     }
 
 

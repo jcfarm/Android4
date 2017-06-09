@@ -142,7 +142,7 @@ public class FieldsFragment extends Fragment {
     public void addFragment(Fragment fragment, String tag) {
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.fragment_container, fragment, tag);
+        transaction.add(R.id.fragment_container, fragment, tag);
         transaction.commit();
     }
 
