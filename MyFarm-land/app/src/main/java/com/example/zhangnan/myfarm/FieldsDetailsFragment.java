@@ -20,6 +20,7 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.example.zhangnan.myfarm.ChartUtils.ChartUtils;
 import com.example.zhangnan.myfarm.activity_information.FieldsDetailsInfo;
 import com.example.zhangnan.myfarm.activity_information.blower;
 import com.example.zhangnan.myfarm.activity_information.co2;
@@ -32,9 +33,11 @@ import com.example.zhangnan.myfarm.activity_information.tmembrane;
 import com.example.zhangnan.myfarm.activity_information.water;
 import com.example.zhangnan.myfarm.activity_information.web;
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.melnykov.fab.FloatingActionButton;
 import com.melnykov.fab.ObservableScrollView;
@@ -56,7 +59,7 @@ public class FieldsDetailsFragment extends Fragment {
     private ViewPager viewPager_banner;
     private ImageView[] mImageViews;
     private int[] imgIdArray;
-    private BarChart barChart;
+    private LineChart lineChart;
     private RecyclerView fieldsDetailsRecyclerView;
     private String[] name ={"light","co2","water","salt"};
     private SeekBar tmembraneSeekBar;
@@ -92,7 +95,11 @@ public class FieldsDetailsFragment extends Fragment {
         viewPager_banner = (ViewPager) view.findViewById(R.id.fields_list_item_view_pager_banner);
         viewPager_banner.setAdapter(new BannerViewPagerAdapter());
 
-        drawChart(view);
+
+        lineChart = (LineChart)view.findViewById(R.id.line_chart);
+        ChartUtils.initChart(lineChart);
+        ChartUtils.notifyDataSetChanged(lineChart, getData(), ChartUtils.dayValue);
+
         initFloatingActionButton(view);
         //getIntentMessage();
         fieldsDetailsSensorsInfoToString();
@@ -183,24 +190,16 @@ public class FieldsDetailsFragment extends Fragment {
         });
     }
 
-    public void drawChart(View view){
-        barChart = (BarChart)view.findViewById(R.id.bar_chart);
-
-        List<BarEntry> entries = new ArrayList<>();
-        entries.add(new BarEntry(1,1));
-        entries.add(new BarEntry(2,2));
-        entries.add(new BarEntry(3,3));
-        entries.add(new BarEntry(4,4));
-        entries.add(new BarEntry(5,5));
-        entries.add(new BarEntry(6,6));
-        BarDataSet dataSet = new BarDataSet(entries,"");
-       dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
-
-        BarData data = new BarData(dataSet);
-
-        barChart.setDescription(null);
-        barChart.setDrawValueAboveBar(false);
-        barChart.setData(data);
+    private List<Entry> getData() {
+        List<Entry> values = new ArrayList<>();
+        values.add(new Entry(0, 13));
+        values.add(new Entry(1, 14));
+        values.add(new Entry(2, 15));
+        values.add(new Entry(3, 30));
+        values.add(new Entry(4, 25));
+        values.add(new Entry(5, 1));
+        values.add(new Entry(6, 20));
+        return values;
     }
 
     public class MyFieldsDetailsItemDecoration extends RecyclerView.ItemDecoration{

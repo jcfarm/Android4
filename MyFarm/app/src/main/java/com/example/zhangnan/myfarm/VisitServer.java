@@ -31,12 +31,12 @@ import okhttp3.Response;
  */
 
 public class VisitServer {
-    private String fieldsUrl = "http://10.0.2.2:8080/MyFarm/fields";
-    private String controllerDetailUrl="http://10.0.2.2:8080/MyFarm/controllers";
+    private String fieldsUrl = "http://farm.kideasoft.com/fields";
+    private String controllerDetailUrl="http://farm.kideasoft.com/controllers";
     private OkHttpClient okHttpClient;
     private static final String TAG="VisitServer";
     private static final MediaType JSON=MediaType.parse("application/json; charset=utf-8");
-    private String controlUrl="http://10.0.2.2:8080/MyFarm/set_judgement";
+    private String controlUrl="http://farm.kideasoft.com/set_judgement";
 
 
 

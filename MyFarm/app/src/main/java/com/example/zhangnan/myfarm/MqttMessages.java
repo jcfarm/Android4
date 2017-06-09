@@ -2,6 +2,8 @@ package com.example.zhangnan.myfarm;
 
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -56,7 +58,8 @@ public class MqttMessages{
                     if(msg.what == 1) {
 
                         String mqttInfo = msg.obj.toString();
-                        if (mqttInfo == null){
+
+                        if (mqttInfo.length() == 0){
                         }else {
                             parserJson(mqttInfo);
                         }
@@ -89,7 +92,7 @@ public class MqttMessages{
         }, 0 * 1000, 1 * 1000, TimeUnit.MILLISECONDS);
     }
 
-    private void init() {
+    public void init() {
         try {
 
             client = new MqttClient(host, "test", new MemoryPersistence());
@@ -119,7 +122,7 @@ public class MqttMessages{
                     System.out.println("messageArrived----------");
                     Message msg = new Message();
                     msg.what = 1;
-                    msg.obj = topicName+":"+message.toString();
+                    msg.obj = message.toString();
                     handler.sendMessage(msg);
                 }
             });
@@ -129,7 +132,7 @@ public class MqttMessages{
         }
     }
 
-    private void connect() {
+    public void connect() {
         new Thread(new Runnable() {
 
             @Override
@@ -160,12 +163,13 @@ public class MqttMessages{
     }
 
     //JSON解析
-    private  void parserJson(final String j) {
-
+    private void parserJson(final String j) {
+        Log.d("Info", j);
         JSONObject jsonObject = JSON.parseObject(j);
         getFieldId(jsonObject);//获取田地id
         getSensors(jsonObject);//解析传感器数据
         getControls(jsonObject);//解析控制器数据
+        Log.d("fieldsDetailsInfo",fieldsDetailsInfo.toString());
         messageMap.put(fieldsDetailsInfo.getId(),fieldsDetailsInfo);//将田地信息JavaBean存入Map
 
     }
@@ -179,7 +183,7 @@ public class MqttMessages{
                     JSONArray sensor = sensors.getJSONObject(i).getJSONArray(name[i]);
                     for (int k = 0; k < sensor.size(); k++) {
                         light l = JSON.parseObject(sensor.getJSONObject(k).toString(),light.class);
-                        light[] ls = new light[k];
+                        light[] ls = new light[sensor.size()];
                         ls[k]=l;
                         fieldsDetailsInfo.setLight(ls);
                     }
@@ -190,7 +194,7 @@ public class MqttMessages{
                     JSONArray sensor = sensors.getJSONObject(i).getJSONArray(name[i]);
                     for (int k = 0; k < sensor.size(); k++) {
                         co2 c = JSON.parseObject(sensor.getJSONObject(k).toString(),co2.class);
-                        co2 [] co2s = new co2[k];
+                        co2 [] co2s = new co2[sensor.size()];
                         co2s[k] = c;
                         fieldsDetailsInfo.setCo2(co2s);
                     }
@@ -200,7 +204,7 @@ public class MqttMessages{
                     JSONArray sensor = sensors.getJSONObject(i).getJSONArray(name[i]);
                     for (int k = 0; k < sensor.size(); k++) {
                         water w = JSON.parseObject(sensor.getJSONObject(k).toString(),water.class);
-                        water[] waters = new water[k];
+                        water[] waters = new water[sensor.size()];
                         waters[k] = w;
                         fieldsDetailsInfo.setWater(waters);
                     }
@@ -210,7 +214,7 @@ public class MqttMessages{
                     JSONArray sensor = sensors.getJSONObject(i).getJSONArray(name[i]);
                     for (int k = 0; k < sensor.size(); k++) {
                         salt s = JSON.parseObject(sensor.getJSONObject(k).toString(),salt.class);
-                        salt[] salts = new salt[k];
+                        salt[] salts = new salt[sensor.size()];
                         salts[k] = s;
                         fieldsDetailsInfo.setSalt(salts);
                     }
@@ -232,7 +236,7 @@ public class MqttMessages{
                     JSONArray control = controls.getJSONObject(i).getJSONArray(name[i]);
                     for (int k = 0; k < control.size(); k++) {
                         blower b = JSON.parseObject(control.getJSONObject(k).toString(),blower.class);
-                        blower[] blowers = new blower[k];
+                        blower[] blowers = new blower[control.size()];
                         blowers[k] = b;
                         fieldsDetailsInfo.setBlower(blowers);
                     }
@@ -244,7 +248,7 @@ public class MqttMessages{
                     JSONArray control = controls.getJSONObject(i).getJSONArray(name[i]);
                     for (int k = 0; k < control.size(); k++) {
                         lamp l = JSON.parseObject(control.getJSONObject(k).toString(),lamp.class);
-                        lamp[] lamps = new lamp[k];
+                        lamp[] lamps = new lamp[control.size()];
                         lamps[k] = l;
                         fieldsDetailsInfo.setLamp(lamps);
                     }
@@ -255,7 +259,7 @@ public class MqttMessages{
                     JSONArray control = controls.getJSONObject(i).getJSONArray(name[i]);
                     for (int k = 0; k < control.size(); k++) {
                         web w = JSON.parseObject(control.getJSONObject(k).toString(),web.class);
-                        web[] webs = new web[k];
+                        web[] webs = new web[control.size()];
                         webs[k] = w;
                         fieldsDetailsInfo.setWeb(webs);
                     }
@@ -266,7 +270,7 @@ public class MqttMessages{
                     JSONArray control = controls.getJSONObject(i).getJSONArray(name[i]);
                     for (int k = 0; k < control.size(); k++) {
                         nmembrane n = JSON.parseObject(control.getJSONObject(k).toString(),nmembrane.class);
-                        nmembrane[] nmembranes = new nmembrane[k];
+                        nmembrane[] nmembranes = new nmembrane[control.size()];
                         nmembranes[k] = n;
                         fieldsDetailsInfo.setNmembrane(nmembranes);
                     }
@@ -277,7 +281,7 @@ public class MqttMessages{
                     JSONArray control = controls.getJSONObject(i).getJSONArray(name[i]);
                     for (int k = 0; k < control.size(); k++) {
                         tmembrane t = JSON.parseObject(control.getJSONObject(k).toString(),tmembrane.class);
-                        tmembrane[] tmembranes = new tmembrane[k];
+                        tmembrane[] tmembranes = new tmembrane[control.size()];
                         tmembranes[k] = t;
                         fieldsDetailsInfo.setTmembrane(tmembranes);
                     }
@@ -288,7 +292,7 @@ public class MqttMessages{
                     JSONArray control = controls.getJSONObject(i).getJSONArray(name[i]);
                     for (int k = 0; k < control.size(); k++) {
                         pump p = JSON.parseObject(control.getJSONObject(k).toString(),pump.class);
-                        pump[] pumps = new pump[k];
+                        pump[] pumps = new pump[control.size()];
                         pumps[k] = p;
                         fieldsDetailsInfo.setPump(pumps);
                     }

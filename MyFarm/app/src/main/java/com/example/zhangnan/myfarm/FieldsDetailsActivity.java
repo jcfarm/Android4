@@ -72,12 +72,18 @@ public class FieldsDetailsActivity extends AppCompatActivity {
     private int defaultCount = 4;
     public Map<Integer, String> fieldsDetailsSensorsInfoMap = new HashMap();
     public Map<Integer, Float> fieldsDetailsControlsInfoMap = new HashMap();
+    private MqttMessages mQttMessages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fields_details);
         getWindow().setStatusBarColor(getResources().getColor(R.color.app_green));
+
+        mQttMessages = new MqttMessages();
+        mQttMessages.init();
+        mQttMessages.connect();
+        mQttMessages.getMessages();
 
         nameTextView = (TextView) findViewById(R.id.fields_name);
         imgIdArray = new int[]{R.drawable.img1, R.drawable.img2, R.drawable.img3,R.drawable.img4,R.drawable.img5};
@@ -150,9 +156,10 @@ public class FieldsDetailsActivity extends AppCompatActivity {
             fieldsDetailsHodler.sensorsNameTextView.setTextSize(15);
             fieldsDetailsHodler.sensorsNameTextView.setTextColor(Color.parseColor("#e0e0e0"));
             fieldsDetailsHodler.sensorsNameTextView.setText("正在加载...");
-
+            Log.d("tag",fieldsDetailsSensorsInfoMap.toString());
             //从fieldsDetailsSensorsInfoMap取出值给每一个item更新数据
             if (!fieldsDetailsControlsInfoMap.isEmpty()) {
+
                 fieldsDetailsHodler.sensorsDetailsTextView.setText(fieldsDetailsSensorsInfoMap.get(position));
             }
 

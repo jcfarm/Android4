@@ -121,7 +121,7 @@ public class MqttMessages{
                     System.out.println("messageArrived----------");
                     Message msg = new Message();
                     msg.what = 1;
-                    msg.obj = topicName+":"+message.toString();
+                    msg.obj = message.toString();
                     handler.sendMessage(msg);
                 }
             });
