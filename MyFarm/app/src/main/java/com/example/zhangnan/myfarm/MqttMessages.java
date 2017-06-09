@@ -85,7 +85,6 @@ public class MqttMessages{
         startReconnect();
     }
 
-
     public void startReconnect() {
         scheduler = Executors.newSingleThreadScheduledExecutor();
         scheduler.scheduleAtFixedRate(new Runnable() {
