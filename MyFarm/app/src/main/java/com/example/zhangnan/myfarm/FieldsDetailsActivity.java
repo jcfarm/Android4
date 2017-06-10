@@ -157,6 +157,7 @@ public class FieldsDetailsActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(FieldsDetailsHodler fieldsDetailsHodler, int position) {
+            fieldsDetailsHodler.sensorsNameTextView.setText(sensorsName[position]);
             fieldsDetailsHodler.sensorsDetailsTextView.setTextSize(15);
             fieldsDetailsHodler.sensorsDetailsTextView.setTextColor(Color.parseColor("#000000"));
             fieldsDetailsHodler.sensorsDetailsTextView.setText(fieldsDetailsSensorsInfoMap.get(position));
