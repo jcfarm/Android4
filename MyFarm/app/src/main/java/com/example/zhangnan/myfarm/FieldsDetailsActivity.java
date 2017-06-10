@@ -103,7 +103,7 @@ public class FieldsDetailsActivity extends AppCompatActivity {
 
         fieldsDetailsRecyclerView = (RecyclerView)findViewById(R.id.fields_details_recycler_view);
         fieldsDetailsRecyclerView.setLayoutManager(new GridLayoutManager(this,2));
-        fieldsDetailsRecyclerView.addItemDecoration(new MyFieldsDetailsItemDecoration(5));
+        fieldsDetailsRecyclerView.addItemDecoration(new MyFieldsDetailsItemDecoration(2));
         fieldsDetailsRecyclerView.setAdapter(fieldsDetailsAdapter = new FieldsDetailsAdapter());
 
         viewPager_banner = (ViewPager) findViewById(R.id.fields_list_item_view_pager_banner);
@@ -224,11 +224,9 @@ public class FieldsDetailsActivity extends AppCompatActivity {
             if (parent.getChildAdapterPosition(view)%2 == 0) {
                 outRect.right = mSpace;
                 outRect.bottom = mSpace;
-                outRect.top = mSpace;
             } else{
                 outRect.left = mSpace;
                 outRect.bottom = mSpace;
-                outRect.top = mSpace;
             }
 
         }
