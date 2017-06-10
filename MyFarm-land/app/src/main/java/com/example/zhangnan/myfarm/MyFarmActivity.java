@@ -92,14 +92,14 @@ public class MyFarmActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(new MyFarmItemDecoration(2));
         recyclerView.setAdapter(new SoundAdapter());
         InitMenuBar();
-        addFragment(new FieldsFragment(),"FieldsFragment");
+        replaceFragment(new FieldsFragment(),"FieldsFragment");
 
     }
 
-    public void addFragment(Fragment fragment, String tag) {
+    public void replaceFragment(Fragment fragment, String tag) {
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.add(R.id.fragment_container, fragment, tag);
+        transaction.replace(R.id.fragment_container, fragment, tag);
         transaction.commit();
     }
 
@@ -137,8 +137,8 @@ public class MyFarmActivity extends AppCompatActivity {
         public void onClick(View view) {
 //            listLinearLayout.setBackground(getResources().getDrawable(R.drawable.my_farm_list_item_background));
             switch (getPosition()){
-                case 0:addFragment(new FieldsFragment(),"FieldsFragment");break;
-                case 1:addFragment(new ControlFragment(),"ControlFragment");break;
+                case 0:replaceFragment(new FieldsFragment(),"FieldsFragment");break;
+                case 1:replaceFragment(new ControlFragment(),"ControlFragment");break;
             }
         }
 
