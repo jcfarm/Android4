@@ -48,7 +48,7 @@ public class MqttMessages{
     private String[] name ={"light","co2","water","salt"};
 
     //田地所有传感器数据JavaBean
-    public  FieldsDetailsInfo fieldsDetailsInfo = new FieldsDetailsInfo();
+    public  FieldsDetailsInfo fieldsDetailsInfo;
 
     public static Handler updateUIHandler;
 
@@ -70,6 +70,7 @@ public class MqttMessages{
                         String mqttInfo = msg.obj.toString();
                         Log.d("json",mqttInfo);
                         if (mqttInfo.length() != 0){
+                            fieldsDetailsInfo = new FieldsDetailsInfo();
                             parserJson(mqttInfo);
                             sendMessages();
                         }
@@ -169,7 +170,6 @@ public class MqttMessages{
         try {
             scheduler.shutdown();
             client.disconnect();
-            fieldsDetailsInfo.clean();
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -334,7 +334,6 @@ public class MqttMessages{
                 updateUIMessage.what =1;
                 updateUIMessage.obj = fieldsDetailsInfo;
                 updateUIHandler.sendMessage(updateUIMessage);
-                fieldsDetailsInfo.clean();
             }
         }).start();
 
