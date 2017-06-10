@@ -106,7 +106,7 @@ public class MqttMessages{
 
     public void init() {
         try {
-            client = new MqttClient(host, "test", new MemoryPersistence());
+            client = new MqttClient(host, "MyFarm", new MemoryPersistence());
             options = new MqttConnectOptions();
             options.setCleanSession(true);
             options.setConnectionTimeout(10);

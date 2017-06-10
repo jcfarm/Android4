@@ -89,7 +89,7 @@ public class FieldsFragment extends Fragment {
         @Override
         public void onClick(View v) {
             clickItemPosition = getPosition() + 1;
-            addFragment(new FieldsDetailsFragment(),"FieldsDetailsFragment");
+            replaceFragment(new FieldsDetailsFragment(),"FieldsDetailsFragment");
         }
     }
 
@@ -139,10 +139,10 @@ public class FieldsFragment extends Fragment {
         }
     }
 
-    public void addFragment(Fragment fragment, String tag) {
+    public void replaceFragment(Fragment fragment, String tag) {
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.add(R.id.fragment_container, fragment, tag);
+        transaction.replace(R.id.fragment_container, fragment, tag);
         transaction.commit();
     }
 
