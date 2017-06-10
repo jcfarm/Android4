@@ -107,7 +107,6 @@ public class FieldsDetailsInfo {
     }
 
     public int getSensorsCount() {
-
         count = 0 ;
         if (co2 != null && co2.length != 0){
             int co = co2.length;
