@@ -307,7 +307,7 @@ public class FieldsDetailsFragment extends Fragment {
             sensorsName = new String[count];
             for (int i = 0;i < mFieldsDetailsInfo.getLight().length;i++){
                 light[] l = mFieldsDetailsInfo.getLight();
-                sensorsName[k] = "光照温湿度变送器" + String.valueOf(i+1);
+                sensorsName[k] = "光照温湿度变送器" + String.valueOf(l[i].getId());
                 fieldsDetailsSensorsInfoMap.put(k++,"温度："+String.valueOf(l[i].getC())+'\n'+
                         "酸碱度："+String.valueOf(l[i].getPh())+'\n'+
                         "光照强度："+String.valueOf(l[i].getLux()));
@@ -316,7 +316,7 @@ public class FieldsDetailsFragment extends Fragment {
 
             for (int i = 0;i < mFieldsDetailsInfo.getCo2().length;i++){
                 co2[] c = mFieldsDetailsInfo.getCo2();
-                sensorsName[k] = "二氧化碳温湿度变送器" + String.valueOf(i+1);
+                sensorsName[k] = "二氧化碳温湿度变送器" + String.valueOf(c[i].getId());
                 fieldsDetailsSensorsInfoMap.put(k++,"温度："+String.valueOf(c[i].getC())+'\n'+
                         "酸碱度："+String.valueOf(c[i].getPh())+'\n'+
                         "二氧化碳浓度："+String.valueOf(c[i].getCo2()));
@@ -324,14 +324,14 @@ public class FieldsDetailsFragment extends Fragment {
 
             for (int i = 0;i < mFieldsDetailsInfo.getWater().length;i++){
                 water[] w = mFieldsDetailsInfo.getWater();
-                sensorsName[k] = "土壤水分传感器" + String.valueOf(i+1);
+                sensorsName[k] = "土壤水分传感器" + String.valueOf(w[i].getId());
                 fieldsDetailsSensorsInfoMap.put(k++,"温度："+String.valueOf(w[i].getC())+'\n'+
                         "湿度："+String.valueOf(w[i].getPe()));
             }
 
             for (int i = 0;i < mFieldsDetailsInfo.getSalt().length;i++){
                 salt[] s = mFieldsDetailsInfo.getSalt();
-                sensorsName[k] = "土壤检测传感" + String.valueOf(i+1);
+                sensorsName[k] = "土壤检测传感" + String.valueOf(s[i].getId());
                 fieldsDetailsSensorsInfoMap.put(k++,"电导率："+String.valueOf(s[i].getMg())+'\n'+
                         "盐分"+s[i].getUs());
             }
