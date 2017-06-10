@@ -61,6 +61,7 @@ public class FieldsDetailsFragment extends Fragment {
     private FieldsDetailsInfo mFieldsDetailsInfo;
     private int count;
     public Map<Integer, String> fieldsDetailsSensorsInfoMap = new HashMap();
+    private String[] sensorsName;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -102,7 +103,7 @@ public class FieldsDetailsFragment extends Fragment {
 
         fieldsDetailsRecyclerView = (RecyclerView)view.findViewById(R.id.fields_details_recycler_view);
         fieldsDetailsRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
-        fieldsDetailsRecyclerView.addItemDecoration(new MyFieldsDetailsItemDecoration(5));
+        fieldsDetailsRecyclerView.addItemDecoration(new MyFieldsDetailsItemDecoration(2));
         fieldsDetailsRecyclerView.setAdapter(fieldsDetailsAdapter = new FieldsDetailsAdapter());
 
 
@@ -145,6 +146,7 @@ public class FieldsDetailsFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(FieldsDetailsHodler fieldsDetailsHodler, int position) {
+            fieldsDetailsHodler.sensorsNameTextView.setText(sensorsName[position]);
             fieldsDetailsHodler.sensorsDetailsTextView.setTextSize(15);
             fieldsDetailsHodler.sensorsDetailsTextView.setTextColor(Color.parseColor("#000000"));
             fieldsDetailsHodler.sensorsDetailsTextView.setText(fieldsDetailsSensorsInfoMap.get(position));
@@ -216,11 +218,9 @@ public class FieldsDetailsFragment extends Fragment {
             if (parent.getChildAdapterPosition(view)%2 == 0) {
                 outRect.right = mSpace;
                 outRect.bottom = mSpace;
-                outRect.top = mSpace;
             } else{
                 outRect.left = mSpace;
                 outRect.bottom = mSpace;
-                outRect.top = mSpace;
             }
 
         }
@@ -284,6 +284,11 @@ public class FieldsDetailsFragment extends Fragment {
         mQttMessages.close();
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        mQttMessages.close();
+    }
 
     private void updateData(){
         fieldsDetailsSensorsInfoToString();
@@ -293,15 +298,19 @@ public class FieldsDetailsFragment extends Fragment {
     private void fieldsDetailsSensorsInfoToString(){
         if (mFieldsDetailsInfo != null){
             int k = 0;
+            sensorsName = new String[count];
             for (int i = 0;i < mFieldsDetailsInfo.getLight().length;i++){
                 light[] l = mFieldsDetailsInfo.getLight();
+                sensorsName[k] = "光照温湿度变送器" + String.valueOf(i+1);
                 fieldsDetailsSensorsInfoMap.put(k++,"温度："+String.valueOf(l[i].getC())+'\n'+
                         "酸碱度："+String.valueOf(l[i].getPh())+'\n'+
                         "光照强度："+String.valueOf(l[i].getLux()));
+
             }
 
             for (int i = 0;i < mFieldsDetailsInfo.getCo2().length;i++){
                 co2[] c = mFieldsDetailsInfo.getCo2();
+                sensorsName[k] = "二氧化碳温湿度变送器" + String.valueOf(i+1);
                 fieldsDetailsSensorsInfoMap.put(k++,"温度："+String.valueOf(c[i].getC())+'\n'+
                         "酸碱度："+String.valueOf(c[i].getPh())+'\n'+
                         "二氧化碳浓度："+String.valueOf(c[i].getCo2()));
@@ -309,12 +318,14 @@ public class FieldsDetailsFragment extends Fragment {
 
             for (int i = 0;i < mFieldsDetailsInfo.getWater().length;i++){
                 water[] w = mFieldsDetailsInfo.getWater();
+                sensorsName[k] = "土壤水分传感器" + String.valueOf(i+1);
                 fieldsDetailsSensorsInfoMap.put(k++,"温度："+String.valueOf(w[i].getC())+'\n'+
                         "湿度："+String.valueOf(w[i].getPe()));
             }
 
             for (int i = 0;i < mFieldsDetailsInfo.getSalt().length;i++){
                 salt[] s = mFieldsDetailsInfo.getSalt();
+                sensorsName[k] = "土壤检测传感" + String.valueOf(i+1);
                 fieldsDetailsSensorsInfoMap.put(k++,"电导率："+String.valueOf(s[i].getMg())+'\n'+
                         "盐分"+s[i].getUs());
             }

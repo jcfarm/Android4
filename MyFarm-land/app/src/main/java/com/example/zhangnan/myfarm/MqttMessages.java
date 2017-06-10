@@ -117,6 +117,7 @@ public class MqttMessages{
                 public void connectionLost(Throwable cause) {
                     //连接丢失后，重连
                     System.out.println("connectionLost----------");
+                    startReconnect();
                 }
 
                 @Override

@@ -66,6 +66,7 @@ public class FieldsDetailsActivity extends AppCompatActivity {
     private FieldsDetailsInfo mFieldsDetailsInfo;
     private int count;
     public Map<Integer, String> fieldsDetailsSensorsInfoMap = new HashMap();
+    private String[] sensorsName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -401,15 +402,19 @@ public class FieldsDetailsActivity extends AppCompatActivity {
     private void fieldsDetailsSensorsInfoToString(){
         if (mFieldsDetailsInfo != null){
             int k = 0;
+            sensorsName = new String[count];
             for (int i = 0;i < mFieldsDetailsInfo.getLight().length;i++){
                 light[] l = mFieldsDetailsInfo.getLight();
+                sensorsName[k] = "光照温湿度变送器" + String.valueOf(i+1);
                 fieldsDetailsSensorsInfoMap.put(k++,"温度："+String.valueOf(l[i].getC())+'\n'+
                         "酸碱度："+String.valueOf(l[i].getPh())+'\n'+
                         "光照强度："+String.valueOf(l[i].getLux()));
+
             }
 
             for (int i = 0;i < mFieldsDetailsInfo.getCo2().length;i++){
                 co2[] c = mFieldsDetailsInfo.getCo2();
+                sensorsName[k] = "二氧化碳温湿度变送器" + String.valueOf(i+1);
                 fieldsDetailsSensorsInfoMap.put(k++,"温度："+String.valueOf(c[i].getC())+'\n'+
                         "酸碱度："+String.valueOf(c[i].getPh())+'\n'+
                         "二氧化碳浓度："+String.valueOf(c[i].getCo2()));
@@ -417,15 +422,18 @@ public class FieldsDetailsActivity extends AppCompatActivity {
 
             for (int i = 0;i < mFieldsDetailsInfo.getWater().length;i++){
                 water[] w = mFieldsDetailsInfo.getWater();
+                sensorsName[k] = "土壤水分传感器" + String.valueOf(i+1);
                 fieldsDetailsSensorsInfoMap.put(k++,"温度："+String.valueOf(w[i].getC())+'\n'+
                         "湿度："+String.valueOf(w[i].getPe()));
             }
 
             for (int i = 0;i < mFieldsDetailsInfo.getSalt().length;i++){
                 salt[] s = mFieldsDetailsInfo.getSalt();
+                sensorsName[k] = "土壤检测传感" + String.valueOf(i+1);
                 fieldsDetailsSensorsInfoMap.put(k++,"电导率："+String.valueOf(s[i].getMg())+'\n'+
                         "盐分"+s[i].getUs());
             }
+
         }
 
     }
