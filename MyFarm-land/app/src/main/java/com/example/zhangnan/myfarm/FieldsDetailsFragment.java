@@ -290,6 +290,12 @@ public class FieldsDetailsFragment extends Fragment {
         mQttMessages.close();
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        mQttMessages.close();
+    }
+
     private void updateData(){
         fieldsDetailsSensorsInfoToString();
         fieldsDetailsAdapter.notifyDataSetChanged();
