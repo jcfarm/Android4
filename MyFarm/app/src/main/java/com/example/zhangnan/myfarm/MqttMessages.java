@@ -69,7 +69,6 @@ public class MqttMessages{
                         sendMessages();
                     }
 
-
                 } else if(msg.what == 2) {
 
                     try {
@@ -328,9 +327,10 @@ public class MqttMessages{
             @Override
             public void run() {
                 Message updateUIMessage= new Message();
-                updateUIMessage.what =1;
+                updateUIMessage.what = 1;
                 updateUIMessage.obj = fieldsDetailsInfo;
                 updateUIHandler.sendMessage(updateUIMessage);
+
                 fieldsDetailsInfo.clean();
             }
         }).start();
