@@ -131,4 +131,11 @@ public class FieldsDetailsInfo {
 
         return count;
     }
+
+    public void clean(){
+        setLight(new light[0]);
+        setCo2(new co2[0]);
+        setWater(new water[0]);
+        setSalt(new salt[0]);
+    }
 }

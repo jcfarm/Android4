@@ -48,7 +48,7 @@ public class MqttMessages{
     private String[] name ={"light","co2","water","salt"};
 
     //田地所有传感器数据JavaBean
-    public static FieldsDetailsInfo fieldsDetailsInfo = new FieldsDetailsInfo();
+    public  FieldsDetailsInfo fieldsDetailsInfo = new FieldsDetailsInfo();
 
     public static Handler updateUIHandler;
 
@@ -169,6 +169,7 @@ public class MqttMessages{
         try {
             scheduler.shutdown();
             client.disconnect();
+            fieldsDetailsInfo.clean();
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -192,14 +193,10 @@ public class MqttMessages{
                     JSONArray sensor = sensors.getJSONObject(i).getJSONArray(name[i]);
                     light[] ls = new light[sensor.size()];
                     for (int k = 0; k < sensor.size(); k++) {
-                        //Log.d("chuanganqi",String.valueOf(sensor.size()));
                         light l = JSON.parseObject(sensor.getJSONObject(k).toString(),light.class);
                         ls[k]=l;
-                        //Log.d("changdu",String.valueOf(ls.length));
                         fieldsDetailsInfo.setLight(ls);
                     }
-
-                    //Log.d("ceshi",String.valueOf(fieldsDetailsInfo.getLight()[1].getLux()));
                 }
 
                 if (i == 1) {
@@ -337,6 +334,7 @@ public class MqttMessages{
                 updateUIMessage.what =1;
                 updateUIMessage.obj = fieldsDetailsInfo;
                 updateUIHandler.sendMessage(updateUIMessage);
+                fieldsDetailsInfo.clean();
             }
         }).start();
 
