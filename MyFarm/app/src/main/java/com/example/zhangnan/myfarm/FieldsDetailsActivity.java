@@ -75,7 +75,6 @@ public class FieldsDetailsActivity extends AppCompatActivity {
 
         //订阅当前田地详情主题
         mQttMessages = new MqttMessages("fields"+String.valueOf(FieldsActivity.clickItemPosition));
-        count = MqttMessages.fieldsDetailsInfo.getSensorsCount();
         Log.d("topic","fields"+String.valueOf(FieldsActivity.clickItemPosition));
 
         MqttMessages.updateUIHandler = new Handler(){

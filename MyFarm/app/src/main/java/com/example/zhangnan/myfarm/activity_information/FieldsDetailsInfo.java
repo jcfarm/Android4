@@ -16,7 +16,7 @@ public class FieldsDetailsInfo {
     private com.example.zhangnan.myfarm.activity_information.tmembrane[] tmembrane;
     private com.example.zhangnan.myfarm.activity_information.water[] water;
     private com.example.zhangnan.myfarm.activity_information.web[] web;
-    private int Count;
+    private int count;
 
     public int getId() {
         return id;
@@ -108,7 +108,7 @@ public class FieldsDetailsInfo {
 
     public int getSensorsCount() {
 
-        int count = 0 ;
+        count = 0 ;
         if (co2 != null){
             int co = co2.length;
             count+=co;
