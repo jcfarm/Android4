@@ -38,7 +38,6 @@ public class FlushView extends View {
     //两圆心之间的距离
     private float d;
 
-    private Path mPath;
     private Animation blueAnimator;
 
     private enum Status{
@@ -65,7 +64,6 @@ public class FlushView extends View {
 
     private void init(){
         // #673ab7 #cddc39
-        mPath = new Path();
         mPaint = new Paint();
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setColor(Color.parseColor("#03a9f4"));
