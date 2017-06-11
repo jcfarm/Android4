@@ -18,10 +18,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import com.example.zhangnan.myfarm.ChartUtils.ChartUtils;
+import com.example.zhangnan.myfarm.OneSelfView.UCFlushView;
 import com.example.zhangnan.myfarm.activity_information.FieldsDetailsInfo;
 import com.example.zhangnan.myfarm.activity_information.co2;
 import com.example.zhangnan.myfarm.activity_information.light;
@@ -62,6 +64,7 @@ public class FieldsDetailsActivity extends AppCompatActivity {
     private String TGA="FDA";
     private Button fild_sideButton;
     private Button fild_topButton;
+    private UCFlushView mUCFlushView;
 
     private MqttMessages mQttMessages;
     private RecyclerView.Adapter fieldsDetailsAdapter;
@@ -89,10 +92,13 @@ public class FieldsDetailsActivity extends AppCompatActivity {
                     mFieldsDetailsInfo = (FieldsDetailsInfo) msg.obj;
                     count = mFieldsDetailsInfo.getSensorsCount();
                     updateData();
+                    updateUI();
                     Log.d("count", String.valueOf(count));
                 }
             }
         };
+
+        mUCFlushView = (UCFlushView) findViewById(R.id.landing_view);
 
         nameTextView = (TextView) findViewById(R.id.fields_name);
         imgIdArray = new int[]{R.drawable.img1, R.drawable.img2, R.drawable.img3,R.drawable.img4,R.drawable.img5};
@@ -399,6 +405,16 @@ public class FieldsDetailsActivity extends AppCompatActivity {
     private void updateData(){
         fieldsDetailsSensorsInfoToString();
         fieldsDetailsAdapter.notifyDataSetChanged();
+    }
+
+    private void updateUI(){
+        if (count != 0){
+            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(0,0);
+            mUCFlushView.setLayoutParams(param);
+        }else {
+            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
+            mUCFlushView.setLayoutParams(param);
+        }
     }
 
     private void fieldsDetailsSensorsInfoToString(){
