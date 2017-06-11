@@ -73,7 +73,7 @@
 
                 </android.support.v7.widget.RecyclerView>
                 
-                <com.example.zhangnan.myfarm.OneSelfView.UCFlushView
+                <com.example.zhangnan.myfarm.OneSelfView.FlushView
                     android:id="@+id/landing_view"
                     android:background="@color/white"
                     android:layout_width="match_parent"

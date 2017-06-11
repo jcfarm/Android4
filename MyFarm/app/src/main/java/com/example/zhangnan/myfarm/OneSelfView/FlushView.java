@@ -35,6 +35,9 @@ public class FlushView extends View {
     private float a;
     private float b;
 
+    //两圆心之间的距离
+    private float d;
+
     private Path mPath;
     private Animation blueAnimator;
 
@@ -77,6 +80,7 @@ public class FlushView extends View {
         moveCircleCenterX = (float) (mCenterX + Math.sqrt(Math.pow(moveCircleRadius + mRadius,2) - Math.pow(mRadius,2) * 2));
         a = (moveCircleCenterY - mCenterY) / (moveCircleCenterX - mCenterX);
         b = ((moveCircleCenterY + mCenterY) - (moveCircleCenterY - mCenterY)*(mCenterX + moveCircleCenterX)/(moveCircleCenterX - mCenterX)) / 2;
+        d = (float) Math.sqrt(Math.pow(moveCircleCenterX - mCenterX,2)+Math.pow(moveCircleCenterY - mCenterY,2));
 
     }
 
@@ -116,15 +120,14 @@ public class FlushView extends View {
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
                 moveCircleCenterY = a * moveCircleCenterX + b;
-                if (Math.abs(moveCircleCenterX - mCenterX)>60)
-                {
-                    moveCircleCenterX = moveCircleCenterX - 100 * interpolatedTime ;
-                }
+
+                moveCircleCenterX = (float) (moveCircleCenterX - Math.sqrt(100 * 100 / 2)*interpolatedTime);
+
                 invalidate();
             }
         };
         blueAnimator.setInterpolator(new LinearInterpolator());
-        blueAnimator.setDuration(1000);
+        blueAnimator.setDuration(800);
         blueAnimator.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
