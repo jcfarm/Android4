@@ -68,13 +68,13 @@ public class ChartUtils {
         yAxis.setTextSize(12);
         // 设置y轴数据偏移量无
 
-        Matrix matrix = new Matrix();
-         //x轴缩放1.5倍
-        matrix.postScale(2.0f, 1f);
-         //在图表动画显示之前进行缩放
-        chart.getViewPortHandler().refresh(matrix, chart, false);
+//        Matrix matrix = new Matrix();
+//         //x轴缩放1.5倍
+//        matrix.postScale(2.0f, 1f);
+//         //在图表动画显示之前进行缩放
+//        chart.getViewPortHandler().refresh(matrix, chart, false);
          //x轴执行动画
-        chart.animateX(2000);
+        chart.animateX(1000);
         chart.invalidate();
         return chart;
     }
@@ -147,7 +147,7 @@ public class ChartUtils {
     private static String[] xValuesProcess(int valueType) {
 
         if (valueType == dayValue) { // 今日
-            String[] dayValues = new String[valuesSize ];
+            String[] dayValues = new String[valuesSize];
             long currentTime = System.currentTimeMillis();
             for (int i = valuesSize - 1 ; i >= 0; i--) {
                 dayValues[i] = TimeUtils.dateToString(currentTime, TimeUtils.dateFormat_day);
