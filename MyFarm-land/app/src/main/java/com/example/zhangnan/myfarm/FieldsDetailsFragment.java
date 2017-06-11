@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -92,6 +93,8 @@ public class FieldsDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_fields_details, container, false);
+
+        mUCFlushView = (FlushView) view.findViewById(R.id.landing_view);
 
         imgIdArray = new int[]{R.drawable.img1, R.drawable.img2, R.drawable.img3,R.drawable.img4,R.drawable.img5};
         mImageViews = new ImageView[imgIdArray.length];
@@ -305,7 +308,13 @@ public class FieldsDetailsFragment extends Fragment {
     }
 
     private void updateUI(){
-
+        if (count != 0){
+            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(0,0);
+            mUCFlushView.setLayoutParams(param);
+        }else {
+            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
+            mUCFlushView.setLayoutParams(param);
+        }
     }
 
     private void fieldsDetailsSensorsInfoToString(){
