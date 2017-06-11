@@ -20,8 +20,9 @@ public class FlushView extends View {
 
     private int mWidth;
     private int mHeight;
-
     private Paint mPaint;
+
+    //固定小圆参数
     private float mRadius = 50.0f;
     private float mCenterX;
     private float mCenterY;
