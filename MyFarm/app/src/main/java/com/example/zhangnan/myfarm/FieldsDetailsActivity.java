@@ -23,7 +23,7 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import com.example.zhangnan.myfarm.ChartUtils.ChartUtils;
-import com.example.zhangnan.myfarm.OneSelfView.UCFlushView;
+import com.example.zhangnan.myfarm.OneSelfView.FlushView;
 import com.example.zhangnan.myfarm.activity_information.FieldsDetailsInfo;
 import com.example.zhangnan.myfarm.activity_information.co2;
 import com.example.zhangnan.myfarm.activity_information.light;
@@ -64,7 +64,7 @@ public class FieldsDetailsActivity extends AppCompatActivity {
     private String TGA="FDA";
     private Button fild_sideButton;
     private Button fild_topButton;
-    private UCFlushView mUCFlushView;
+    private FlushView mUCFlushView;
 
     private MqttMessages mQttMessages;
     private RecyclerView.Adapter fieldsDetailsAdapter;
@@ -98,7 +98,7 @@ public class FieldsDetailsActivity extends AppCompatActivity {
             }
         };
 
-        mUCFlushView = (UCFlushView) findViewById(R.id.landing_view);
+        mUCFlushView = (FlushView) findViewById(R.id.landing_view);
 
         nameTextView = (TextView) findViewById(R.id.fields_name);
         imgIdArray = new int[]{R.drawable.img1, R.drawable.img2, R.drawable.img3,R.drawable.img4,R.drawable.img5};

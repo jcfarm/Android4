@@ -22,6 +22,7 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import com.example.zhangnan.myfarm.ChartUtils.ChartUtils;
+import com.example.zhangnan.myfarm.OneSelfView.FlushView;
 import com.example.zhangnan.myfarm.activity_information.FieldsDetailsInfo;
 import com.example.zhangnan.myfarm.activity_information.co2;
 import com.example.zhangnan.myfarm.activity_information.light;
@@ -54,6 +55,7 @@ public class FieldsDetailsFragment extends Fragment {
     private Switch lightSwitch;
     private Switch lampSwitch;
     private String fieldsName;
+    private FlushView mUCFlushView;
 
     private MqttMessages mQttMessages;
     private RecyclerView.Adapter fieldsDetailsAdapter;
@@ -79,6 +81,7 @@ public class FieldsDetailsFragment extends Fragment {
                     mFieldsDetailsInfo = (FieldsDetailsInfo) msg.obj;
                     count = mFieldsDetailsInfo.getSensorsCount();
                     updateData();
+                    updateUI();
                     Log.d("count", String.valueOf(count));
                 }
             }
@@ -299,6 +302,10 @@ public class FieldsDetailsFragment extends Fragment {
     private void updateData(){
         fieldsDetailsSensorsInfoToString();
         fieldsDetailsAdapter.notifyDataSetChanged();
+    }
+
+    private void updateUI(){
+
     }
 
     private void fieldsDetailsSensorsInfoToString(){

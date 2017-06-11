@@ -1,4 +1,4 @@
-package com.example.zhangnan.myfarm.CustomerView;
+package com.example.zhangnan.myfarm.OneSelfView;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -6,9 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.support.annotation.Nullable;
-import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
@@ -53,6 +51,8 @@ public class FlushView extends View {
         super(context, attrs);
         init();
         initAnimation();
+        startAnimation(blueAnimator);
+        invalidate();
     }
 
     public FlushView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
@@ -124,7 +124,7 @@ public class FlushView extends View {
             }
         };
         blueAnimator.setInterpolator(new LinearInterpolator());
-        blueAnimator.setDuration(500);
+        blueAnimator.setDuration(1000);
         blueAnimator.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -156,16 +156,6 @@ public class FlushView extends View {
 
             }
         });
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        final int action = MotionEventCompat.getActionMasked(event);
-        if(action == MotionEvent.ACTION_DOWN) {
-            startAnimation(blueAnimator);
-        }
-        invalidate();
-        return true;
     }
 
     public void resetPosition(){
