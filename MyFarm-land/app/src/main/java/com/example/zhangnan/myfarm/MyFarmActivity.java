@@ -47,7 +47,7 @@ public class MyFarmActivity extends AppCompatActivity {
 
     private int itemImages[] = {
             R.drawable.fielddetails,
-            R.drawable.control,
+            R.drawable.control2,
             R.drawable.robotcontrol,
             R.drawable.alert,
             R.drawable.chart,
