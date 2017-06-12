@@ -39,21 +39,21 @@ import java.util.Map;
 
 public class MyFarmActivity extends AppCompatActivity {
 
-    private String[] name={"My Farm","远程控制","机器人控制","报警信息","历史图表","历史数据","设置","关于我们"};
+    private String[] name={"My Farm","远程控制","机器人控制","报警信息","历史图表","历史记录","设置","关于我们"};
     private  String[] values = new String[]{ "操作记录", "日志", "检查更新", "设置","退出登录",};
     private  int[] img = new int[]{R.drawable.ic_action_record,R.drawable.ic_action_log,
             R.drawable.ic_action_update,R.drawable.ic_action_setting, R.drawable.ic_action_quit};
     private List<Map<String, Object>> data;
 
     private int itemImages[] = {
-            R.drawable.farm,
-            R.drawable.kongzhi,
-            R.drawable.jiankong,
-            R.drawable.jinggao,
-            R.drawable.huanjing,
-            R.drawable.shuju,
-            R.drawable.shezhi,
-            R.drawable.image_1
+            R.drawable.fielddetails,
+            R.drawable.control,
+            R.drawable.robotcontrol,
+            R.drawable.alert,
+            R.drawable.chart,
+            R.drawable.pen,
+            R.drawable.setting,
+            R.drawable.aboutus
     };
 
     private Intent i;
