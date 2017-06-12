@@ -1,16 +1,10 @@
-# android4
-MyFarm使用简介：
+# 智慧农场
+使用简介：
+操作界面，对大棚内的田地实时监控和控制
 
+界面：  
+![主界面](img/主界面.png)
+![田地列表](img/田地列表.png)
+![田地详情](img/田地详情.png)
+![田地详情](img/远程控制.png)
 
-
-
-
-
-MyFarm截图：
-![Alt text](img/home.png)
-
-
-
-
-
-MyFarm项目构造：
