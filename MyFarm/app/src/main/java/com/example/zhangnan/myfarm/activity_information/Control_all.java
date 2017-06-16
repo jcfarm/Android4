@@ -11,6 +11,15 @@ public class Control_all {
     String type;
     String  ischeck;
     ArrayList<String> id;
+    String state;
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
 
     public Control_all() {
         id=new ArrayList<>();

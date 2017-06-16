@@ -52,6 +52,7 @@ public class ControlDetalisActivity extends AppCompatActivity {
     private Controller c;
     private boolean ischanged=false;
     private boolean isclicked=false;
+    private int i;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,40 +71,72 @@ public class ControlDetalisActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                Control_all control_all=new Control_all();
-                all_off_btn.setBackground(getResources().getDrawable(R.drawable.green));
-                control_all.setType(type);
-                control_all.setIscheck("1");
-                for(int i=0;i<count;i++){
-                    control_all.getId().add(String.valueOf(i+1));
+                Log.d(TAG, "onClick: "+Tag);
+                if (Tag == 0) {
+                    Control_all control_all = new Control_all();
+                    all_off_btn.setBackground(getResources().getDrawable(R.drawable.green));
+                    control_all.setType(type);
+                    control_all.setIscheck("1");
+                    for (int i = 0; i < count; i++) {
+                        control_all.getId().add(String.valueOf(i + 1));
+                    }
+                    postJsonTask(creatJsonString(control_all));
+                    ischanged = true;
+                    isclicked = true;
+                    recyclerView.setAdapter(new SoundAdapter(c));
+                    Toast.makeText(context, control_all.getId().toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "已全部开启", Toast.LENGTH_LONG).show();
+                }else if(Tag==1){
+                    Control_all control_all = new Control_all();
+                    all_off_btn.setBackground(getResources().getDrawable(R.drawable.green));
+                    control_all.setType(type);
+                    control_all.setState("100");
+                    for (int i = 0; i < count; i++) {
+                        control_all.getId().add(String.valueOf(i + 1));
+                    }
+                    postJsonTask(creatJsonString(control_all));
+                    ischanged = true;
+                    isclicked = true;
+                    recyclerView.setAdapter(new SoundAdapter(c));
+                    Toast.makeText(context, control_all.getId().toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "已全部开启", Toast.LENGTH_LONG).show();
                 }
-                postJsonTask(creatJsonString(control_all));
-                ischanged=true;
-                isclicked=true;
-                recyclerView.setAdapter(new SoundAdapter(c));
-                Toast.makeText(context,control_all.getId().toString(),Toast.LENGTH_SHORT).show();
-                Toast.makeText(context,"已全部开启",Toast.LENGTH_LONG).show();
+
             }
-
-
         });
         all_off_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Control_all control_all=new Control_all();
-                all_off_btn.setBackground(getResources().getDrawable(R.drawable.green));
-                control_all.setType(type);
-                control_all.setIscheck("0");
-                for(int i=0;i<count;i++){
-                    control_all.getId().add(String.valueOf(i+1));
-                }
-                postJsonTask(creatJsonString(control_all));
-                ischanged=false;
-                isclicked=true;
-                recyclerView.setAdapter(new SoundAdapter(c));
-                Toast.makeText(context,control_all.getId().toString(),Toast.LENGTH_SHORT).show();
-                Toast.makeText(context,"已全部关闭",Toast.LENGTH_LONG).show();
+                if (Tag == 0) {
+                    Control_all control_all = new Control_all();
+                    all_off_btn.setBackground(getResources().getDrawable(R.drawable.green));
+                    control_all.setType(type);
+                    control_all.setIscheck("0");
+                    for (int i = 0; i < count; i++) {
+                        control_all.getId().add(String.valueOf(i + 1));
+                    }
+                    postJsonTask(creatJsonString(control_all));
+                    ischanged = false;
+                    isclicked = true;
+                    recyclerView.setAdapter(new SoundAdapter(c));
+                    Toast.makeText(context, control_all.getId().toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "已全部关闭", Toast.LENGTH_LONG).show();
 
+                }else if(Tag==1){
+                    Control_all control_all = new Control_all();
+                    all_off_btn.setBackground(getResources().getDrawable(R.drawable.green));
+                    control_all.setType(type);
+                    control_all.setState("0");
+                    for (int i = 0; i < count; i++) {
+                        control_all.getId().add(String.valueOf(i + 1));
+                    }
+                    postJsonTask(creatJsonString(control_all));
+                    ischanged = false;
+                    isclicked = true;
+                    recyclerView.setAdapter(new SoundAdapter(c));
+                    Toast.makeText(context, control_all.getId().toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "已全部关闭", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -204,15 +237,14 @@ public class ControlDetalisActivity extends AppCompatActivity {
         public void onBindViewHolder(final SoundHolder soundHodler, final int position) {
             soundHodler.bindHolder(controller,position);
             Log.d(TAG, "ischanged: "+ischanged);
-            if(isclicked) {
-                if (ischanged) {
-                    soundHodler.aSwitch.setChecked(true);
-                } else {
-                    soundHodler.aSwitch.setChecked(false);
-                }
-            }
-
             if (Tag == 0){
+                if(isclicked) {
+                    if (ischanged) {
+                        soundHodler.aSwitch.setChecked(true);
+                    } else {
+                        soundHodler.aSwitch.setChecked(false);
+                    }
+                }
                 soundHodler.aSwitch.setTag(position);
                 if (soundHodler.aSwitch.isChecked()){
                     soundHodler.aSwitch.setText("开");
@@ -221,6 +253,13 @@ public class ControlDetalisActivity extends AppCompatActivity {
                 }
                 switchClick(soundHodler.aSwitch,position,controller.getCurrentController());
             }else {
+                if(isclicked) {
+                    if (ischanged) {
+                        soundHodler.aSeekBar.setProgress(100);
+                    } else {
+                        soundHodler.aSeekBar.setProgress(0);
+                    }
+                }
                 seekBarClick(soundHodler.abutton,soundHodler.aSeekBar,position,controller.getCurrentController());
             }
 
