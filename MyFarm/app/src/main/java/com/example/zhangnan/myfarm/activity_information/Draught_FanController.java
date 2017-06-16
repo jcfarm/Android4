@@ -4,7 +4,7 @@ package com.example.zhangnan.myfarm.activity_information;
  * Created by Far-away on 17/5/24.
  */
 
-public class Draught_FanController {
+public class Draught_FanController  {
     private String id;
     private String type;
     private String state;

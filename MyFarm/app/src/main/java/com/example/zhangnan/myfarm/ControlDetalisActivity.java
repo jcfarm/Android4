@@ -2,6 +2,8 @@ package com.example.zhangnan.myfarm;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,16 +13,24 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ListAdapter;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.zhangnan.myfarm.activity_information.Control_all;
 import com.example.zhangnan.myfarm.activity_information.Controller;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+
+import static com.example.zhangnan.myfarm.R.drawable.green;
+import static com.example.zhangnan.myfarm.R.drawable.view_pager_bottom_raduis_5dp;
 
 /**
  * Created by zhangnan on 17/5/3.
@@ -33,8 +43,16 @@ public class ControlDetalisActivity extends AppCompatActivity {
     private static final String EXTRA_POSITION="com.example.zhangnan.myfarm.position";
     private int namePosition;
     private TextView controllerTitleTextView;
-
+    private Button all_off_btn;
+    private Button all_on_btn;
+    private Context context=this;
+    private String type;
+    private int count;
     public static int Tag;
+    private Controller c;
+    private boolean ischanged=false;
+    private boolean isclicked=false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,17 +64,61 @@ public class ControlDetalisActivity extends AppCompatActivity {
         new getControllerInfoTask().execute();
         recyclerView = (RecyclerView) findViewById(R.id.control_details_recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(this,1));
+        all_on_btn= (Button) findViewById(R.id.control_details_list_item_select_all_on_btn);
+        all_off_btn= (Button) findViewById(R.id.control_details_list_item_select_all_off_btn);
+        all_on_btn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Control_all control_all=new Control_all();
+                all_off_btn.setBackground(getResources().getDrawable(R.drawable.green));
+                control_all.setType(type);
+                control_all.setIscheck("1");
+                for(int i=0;i<count;i++){
+                    control_all.getId().add(String.valueOf(i+1));
+                }
+                postJsonTask(creatJsonString(control_all));
+                ischanged=true;
+                isclicked=true;
+                recyclerView.setAdapter(new SoundAdapter(c));
+                Toast.makeText(context,control_all.getId().toString(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(context,"已全部开启",Toast.LENGTH_LONG).show();
+            }
+
+
+        });
+        all_off_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Control_all control_all=new Control_all();
+                all_off_btn.setBackground(getResources().getDrawable(R.drawable.green));
+                control_all.setType(type);
+                control_all.setIscheck("0");
+                for(int i=0;i<count;i++){
+                    control_all.getId().add(String.valueOf(i+1));
+                }
+                postJsonTask(creatJsonString(control_all));
+                ischanged=false;
+                isclicked=true;
+                recyclerView.setAdapter(new SoundAdapter(c));
+                Toast.makeText(context,control_all.getId().toString(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(context,"已全部关闭",Toast.LENGTH_LONG).show();
+
+            }
+        });
+
 
     }
 
-    private class SoundHolder extends RecyclerView.ViewHolder{
+    private class SoundHolder extends RecyclerView.ViewHolder {
         private TextView idTextView;
         private Switch aSwitch;
         private SeekBar aSeekBar;
         private Button abutton;
 
-        public SoundHolder(View view) {
+        public SoundHolder(final View view) {
             super(view);
+
             switch (namePosition){
                 case 0:case 1:case 2:case 3:{
                     idTextView= (TextView) view.findViewById(R.id.control_list_item_id_text_view);
@@ -74,21 +136,26 @@ public class ControlDetalisActivity extends AppCompatActivity {
         public void bindHolder(Controller controller,int position){
             switch (namePosition){
                 case 0:{
+                    idTextView.setTag(0);
                     idTextView.setText(controller.getWater_pumpControllers().get(position).getId());
                     aSwitch.setChecked(controller.getWater_pumpControllers().get(position).getState());
                     controller.setCurrentController("water_pump");
+
                 }break;
                 case 1:{
+                    idTextView.setTag(0);
                     idTextView.setText(controller.getDraught_fansController().get(position).getId());
                     aSwitch.setChecked(controller.getDraught_fansController().get(position).getState());
                     controller.setCurrentController("draught_fans");
                 }break;
                 case 2:{
+                    idTextView.setTag(0);
                     idTextView.setText(controller.getLightControllers().get(position).getId());
                     aSwitch.setChecked(controller.getLightControllers().get(position).getState());
                     controller.setCurrentController("light");
                 }break;
                 case 3:{
+                    idTextView.setTag(0);
                     idTextView.setText(controller.getWaningControllers().get(position).getId());
                     aSwitch.setChecked(controller.getWaningControllers().get(position).getState());
                     controller.setCurrentController("waning");
@@ -105,20 +172,18 @@ public class ControlDetalisActivity extends AppCompatActivity {
                 }break;
 
             }
+            type=controller.getCurrentController();
         }
 
     }
-
-
-    private class SoundAdapter extends RecyclerView.Adapter<SoundHolder>{
+    private class SoundAdapter extends RecyclerView.Adapter<SoundHolder> {
             Controller controller;
 
         public SoundAdapter(Controller controller) {
             this.controller = controller;
         }
-
         @Override
-        public SoundHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public SoundHolder onCreateViewHolder(ViewGroup parent, int viewTyp) {
             LayoutInflater inflater= LayoutInflater.from(ControlDetalisActivity.this);
             switch (namePosition){
                 case 0:case 1:case 2:case 3:{
@@ -138,7 +203,17 @@ public class ControlDetalisActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final SoundHolder soundHodler, final int position) {
             soundHodler.bindHolder(controller,position);
+            Log.d(TAG, "ischanged: "+ischanged);
+            if(isclicked) {
+                if (ischanged) {
+                    soundHodler.aSwitch.setChecked(true);
+                } else {
+                    soundHodler.aSwitch.setChecked(false);
+                }
+            }
+
             if (Tag == 0){
+                soundHodler.aSwitch.setTag(position);
                 if (soundHodler.aSwitch.isChecked()){
                     soundHodler.aSwitch.setText("开");
                 }else{
@@ -165,6 +240,10 @@ public class ControlDetalisActivity extends AppCompatActivity {
             }
         }
 
+        @Override
+        public long getItemId(int position) {
+            return super.getItemId(position);
+        }
     }
 
     public static Intent newIntent(Context packageContext,int position){
@@ -183,7 +262,11 @@ public class ControlDetalisActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Controller controller) {
-            recyclerView.setAdapter(new SoundAdapter(controller));
+            SoundAdapter adapter=new SoundAdapter(controller);
+            recyclerView.setAdapter(adapter);
+            count=adapter.getItemCount();
+            c=controller;
+            Log.d(TAG, "onCreate: " +adapter.getItemCount());
 
         }
     }
@@ -257,6 +340,12 @@ public class ControlDetalisActivity extends AppCompatActivity {
     }
     public void postJsonTask(String jsonstring){
         new postJsonTask().execute(jsonstring);
+    }
+
+    public String creatJsonString(Control_all control_all){
+        String jsonString=new Gson().toJson(control_all);
+        Log.d(TAG, "creatJsonString: " + jsonString);
+        return jsonString;
     }
 
 }
