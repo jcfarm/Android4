@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.zhangnan.myfarm.OneSelfView.FlushView;
 import com.example.zhangnan.myfarm.activity_information.FieldsInfo;
 
 import java.util.ArrayList;
@@ -38,6 +39,8 @@ public class FieldsFragment extends Fragment {
     private EditText searchEditText;
     private ImageView searchCancel;
     private ImageView searchOk;
+    private LinearLayout fieldsRecyclerViewLinearLayout;
+    private FlushView flushView;
 
     private Map<String,String> mqttMessagesMap = new HashMap<>();
     private SoundAdapter soundAdapter;
@@ -49,6 +52,9 @@ public class FieldsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_fields, container, false);
+        fieldsRecyclerViewLinearLayout = (LinearLayout) view.findViewById(R.id.fields_recycler_view_linear_layout);
+        updateUI();
+
         new GetFiledInfoTask().execute();
         recyclerView = (RecyclerView) view.findViewById(R.id.fields_recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),1));
@@ -89,6 +95,7 @@ public class FieldsFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
+            FragmentActivity.fragmentContainerDetalis.removeView(FragmentActivity.mTextView);
             clickItemPosition = getPosition() + 1;
             fieldsName = (String) fieldNameTextView.getText();
             replaceFragment(new FieldsDetailsFragment(),"FieldsDetailsFragment");
@@ -138,6 +145,14 @@ public class FieldsFragment extends Fragment {
             this.mSpace = space;
         }
 
+    }
+
+    private void updateUI(){
+        if (fieldsInfos.size() == 0){
+            fieldsRecyclerViewLinearLayout.addView( flushView = new FlushView(getActivity()));
+        }else {
+            fieldsRecyclerViewLinearLayout.removeView(flushView);
+        }
     }
 
 

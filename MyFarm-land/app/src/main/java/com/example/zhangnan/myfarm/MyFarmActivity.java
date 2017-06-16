@@ -196,7 +196,6 @@ public class MyFarmActivity extends AppCompatActivity {
         int result = getResources().getDimensionPixelSize(resourceId);
 
         WindowManager wm = getWindowManager();
-        int width = wm.getDefaultDisplay().getWidth();
         int height = wm.getDefaultDisplay().getHeight();
         itemHeight = (height - result - DensityUtils.dip2px(this,80) - 4)/2;
     }
