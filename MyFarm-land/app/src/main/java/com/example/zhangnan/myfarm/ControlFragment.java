@@ -35,7 +35,7 @@ public class ControlFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_control, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.fragment_control_recycler_view);
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),1));
         recyclerView.addItemDecoration(new MyFarmActivity.MyFarmItemDecoration(2));
         recyclerView.setAdapter(soundAdapter = new SoundAdapter());
         return view;
@@ -93,7 +93,7 @@ public class ControlFragment extends Fragment {
     public void replaceFragment(Fragment fragment, String tag) {
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.fragment_container, fragment, tag);
+        transaction.replace(R.id.fragment_container_detalis, fragment, tag);
         transaction.commit();
     }
 

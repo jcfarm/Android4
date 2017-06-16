@@ -21,6 +21,7 @@
         </activity>
         <activity android:name=".LandingActivity" />
         <activity android:name=".MonitorActivity" />
+        <activity android:name=".FragmentActivity" />
 
     </application>
 

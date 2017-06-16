@@ -50,7 +50,7 @@ public class FieldsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_fields, container, false);
         new GetFiledInfoTask().execute();
         recyclerView = (RecyclerView) view.findViewById(R.id.fields_recycler_view);
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),1));
         recyclerView.addItemDecoration(new MyFarmActivity.MyFarmItemDecoration(2));
         recyclerView.setAdapter(soundAdapter = new SoundAdapter(fieldsInfos));
         return view;
@@ -142,7 +142,7 @@ public class FieldsFragment extends Fragment {
     public void replaceFragment(Fragment fragment, String tag) {
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.fragment_container, fragment, tag);
+        transaction.replace(R.id.fragment_container_detalis, fragment, tag);
         transaction.commit();
     }
 
