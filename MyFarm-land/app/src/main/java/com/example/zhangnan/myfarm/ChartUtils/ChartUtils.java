@@ -67,11 +67,11 @@ public class ChartUtils {
         yAxis.setTextSize(12);
         // 设置y轴数据偏移量无
 
-        Matrix matrix = new Matrix();
-         //x轴缩放1.5倍
-        matrix.postScale(2.0f, 1f);
-         //在图表动画显示之前进行缩放
-        chart.getViewPortHandler().refresh(matrix, chart, false);
+//        Matrix matrix = new Matrix();
+//         //x轴缩放1.5倍
+//        matrix.postScale(2.0f, 1f);
+//         //在图表动画显示之前进行缩放
+//        chart.getViewPortHandler().refresh(matrix, chart, false);
          //x轴执行动画
         chart.animateX(2000);
         chart.invalidate();

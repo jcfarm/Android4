@@ -14,13 +14,6 @@
         android:orientation="vertical">
     </LinearLayout>
 
-    <View
-        android:layout_width="2dp"
-        android:layout_height="match_parent"
-        android:background="@color/gray">
-
-    </View>
-
     <LinearLayout
         android:id="@+id/fragment_container_detalis"
         android:orientation="vertical"

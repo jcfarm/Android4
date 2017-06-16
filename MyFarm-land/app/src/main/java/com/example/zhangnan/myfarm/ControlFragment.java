@@ -70,6 +70,7 @@ public class ControlFragment extends Fragment {
             controlLinearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    FragmentActivity.fragmentContainerDetalis.removeView(FragmentActivity.mTextView);
                     controlItemClickPosition = getPosition();
                     replaceFragment(new ControlDetalisFragment(),"ControlDetalisFragment");
                 }
