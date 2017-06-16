@@ -12,6 +12,7 @@ import android.graphics.drawable.AnimatedStateListDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.*;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -20,15 +21,20 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.zhangnan.myfarm.ChartUtils.ChartUtils;
+import com.example.zhangnan.myfarm.Utils.DensityUtils;
 import com.ikimuhendis.ldrawer.ActionBarDrawerToggle;
 import com.ikimuhendis.ldrawer.DrawerArrowDrawable;
 
@@ -39,21 +45,21 @@ import java.util.Map;
 
 public class MyFarmActivity extends AppCompatActivity {
 
-    private String[] name={"My Farm","远程控制","机器人控制","报警信息","历史图表","历史数据","设置","关于我们"};
+    private String[] name={"My Farm","远程控制","机器人控制","报警信息","历史图表","历史记录","设置","关于我们"};
     private  String[] values = new String[]{ "操作记录", "日志", "检查更新", "设置","退出登录",};
     private  int[] img = new int[]{R.drawable.ic_action_record,R.drawable.ic_action_log,
             R.drawable.ic_action_update,R.drawable.ic_action_setting, R.drawable.ic_action_quit};
     private List<Map<String, Object>> data;
 
     private int itemImages[] = {
-            R.drawable.farm,
-            R.drawable.kongzhi,
-            R.drawable.jiankong,
-            R.drawable.jinggao,
-            R.drawable.huanjing,
-            R.drawable.shuju,
-            R.drawable.shezhi,
-            R.drawable.image_1
+            R.drawable.fielddetails,
+            R.drawable.control2,
+            R.drawable.robotcontrol,
+            R.drawable.alert,
+            R.drawable.chart,
+            R.drawable.pen,
+            R.drawable.setting,
+            R.drawable.aboutus
     };
 
     private Intent i;
@@ -66,6 +72,8 @@ public class MyFarmActivity extends AppCompatActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerArrowDrawable drawerArrow;
     private boolean drawerArrowColor;
+    public static int selectItem;
+    private int itemHeight;
 
     private static boolean isExit = false;
 
@@ -84,23 +92,15 @@ public class MyFarmActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_myfarm);
 
+        adjItemHeight();
         getWindow().setStatusBarColor(getResources().getColor(R.color.app_green));
 
         data = getData();
         RecyclerView recyclerView = (RecyclerView)findViewById(R.id.my_farm_recycler_view);
-        recyclerView.setLayoutManager(new GridLayoutManager(this,2));
+        recyclerView.setLayoutManager(new GridLayoutManager(this,4));
         recyclerView.addItemDecoration(new MyFarmItemDecoration(2));
         recyclerView.setAdapter(new SoundAdapter());
         InitMenuBar();
-        replaceFragment(new FieldsFragment(),"FieldsFragment");
-
-    }
-
-    public void replaceFragment(Fragment fragment, String tag) {
-        FragmentManager manager = getFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.fragment_container, fragment, tag);
-        transaction.commit();
     }
 
 
@@ -130,16 +130,19 @@ public class MyFarmActivity extends AppCompatActivity {
             listImageView = (ImageView)itemView.findViewById(R.id.list_item_imageview);
             listTextView = (TextView)itemView.findViewById(R.id.list_item_textview);
             listLinearLayout.setOnClickListener(this);
+
+            FrameLayout.LayoutParams param = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,itemHeight);
+            listLinearLayout.setLayoutParams(param);
+
         }
 
 
         @Override
         public void onClick(View view) {
-//            listLinearLayout.setBackground(getResources().getDrawable(R.drawable.my_farm_list_item_background));
-            switch (getPosition()){
-                case 0:replaceFragment(new FieldsFragment(),"FieldsFragment");break;
-                case 1:replaceFragment(new ControlFragment(),"ControlFragment");break;
-            }
+            selectItem = getPosition();
+            i= FragmentActivity.newIntent(MyFarmActivity.this);
+            startActivity(i);
+
         }
 
     }
@@ -167,20 +170,17 @@ public class MyFarmActivity extends AppCompatActivity {
         }
     }
 
-    public static class MyFarmItemDecoration extends RecyclerView.ItemDecoration{
+    private class MyFarmItemDecoration extends RecyclerView.ItemDecoration{
         int mSpace;
 
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             super.getItemOffsets(outRect, view, parent, state);
-            if (parent.getChildAdapterPosition(view)%2 == 0) {
-                outRect.right = mSpace;
+            if (parent.getChildAdapterPosition(view)%4 == 0) {
                 outRect.bottom = mSpace;
-                outRect.top = mSpace;
             } else{
                 outRect.left = mSpace;
                 outRect.bottom = mSpace;
-                outRect.top = mSpace;
             }
 
         }
@@ -191,6 +191,14 @@ public class MyFarmActivity extends AppCompatActivity {
 
     }
 
+    private void adjItemHeight(){
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        int result = getResources().getDimensionPixelSize(resourceId);
+
+        WindowManager wm = getWindowManager();
+        int height = wm.getDefaultDisplay().getHeight();
+        itemHeight = (height - result - DensityUtils.dip2px(this,80) - 4)/2;
+    }
 
 
     public static Intent newIntent(Context packageContext){

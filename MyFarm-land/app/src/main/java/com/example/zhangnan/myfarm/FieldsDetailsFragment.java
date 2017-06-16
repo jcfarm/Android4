@@ -55,7 +55,7 @@ public class FieldsDetailsFragment extends Fragment {
     private SeekBar nmembraneSeekBar;
     private Switch lightSwitch;
     private Switch lampSwitch;
-    private String fieldsName;
+    private TextView nameTextView;
     private FlushView mUCFlushView;
 
     private MqttMessages mQttMessages;
@@ -82,7 +82,7 @@ public class FieldsDetailsFragment extends Fragment {
                     mFieldsDetailsInfo = (FieldsDetailsInfo) msg.obj;
                     count = mFieldsDetailsInfo.getSensorsCount();
                     updateData();
-                    updateUI();
+                    //updateUI();
                     Log.d("count", String.valueOf(count));
                 }
             }
@@ -94,7 +94,8 @@ public class FieldsDetailsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_fields_details, container, false);
 
-        mUCFlushView = (FlushView) view.findViewById(R.id.landing_view);
+        nameTextView = (TextView) view.findViewById(R.id.fields_name);
+        nameTextView.setText(FieldsFragment.fieldsName);
 
         imgIdArray = new int[]{R.drawable.img1, R.drawable.img2, R.drawable.img3,R.drawable.img4,R.drawable.img5};
         mImageViews = new ImageView[imgIdArray.length];
@@ -107,12 +108,11 @@ public class FieldsDetailsFragment extends Fragment {
 
         System.out.println("***********************"+count);
 
+
         fieldsDetailsRecyclerView = (RecyclerView)view.findViewById(R.id.fields_details_recycler_view);
         fieldsDetailsRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
         fieldsDetailsRecyclerView.addItemDecoration(new MyFieldsDetailsItemDecoration(2));
         fieldsDetailsRecyclerView.setAdapter(fieldsDetailsAdapter = new FieldsDetailsAdapter());
-
-
 
         viewPager_banner = (ViewPager) view.findViewById(R.id.fields_list_item_view_pager_banner);
         viewPager_banner.setAdapter(new BannerViewPagerAdapter());
@@ -307,15 +307,15 @@ public class FieldsDetailsFragment extends Fragment {
         fieldsDetailsAdapter.notifyDataSetChanged();
     }
 
-    private void updateUI(){
-        if (count != 0){
-            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(0,0);
-            mUCFlushView.setLayoutParams(param);
-        }else {
-            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
-            mUCFlushView.setLayoutParams(param);
-        }
-    }
+//    private void updateUI(){
+//        if (count != 0){
+//            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(0,0);
+//            mUCFlushView.setLayoutParams(param);
+//        }else {
+//            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
+//            mUCFlushView.setLayoutParams(param);
+//        }
+//    }
 
     private void fieldsDetailsSensorsInfoToString(){
         if (mFieldsDetailsInfo != null){

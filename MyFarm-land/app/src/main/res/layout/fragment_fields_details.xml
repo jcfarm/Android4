@@ -4,7 +4,7 @@
     xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <com.melnykov.fab.FloatingActionButton
         android:id="@+id/floating_action_button"
@@ -20,7 +20,7 @@
     <com.melnykov.fab.ObservableScrollView
         android:id="@+id/fab_scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="#e0e0e0"
         android:orientation="vertical"
         android:scrollbars="none">
@@ -29,6 +29,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/fields_name"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/app_green"
+                android:gravity="center"
+                android:textColor="#ffffff"
+                android:textSize="16sp" />
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/fields_list_item_view_pager_banner"
@@ -56,18 +65,17 @@
                     android:textSize="16sp"
                     tools:ignore="RtlHardcoded,RtlSymmetry" />
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/fields_details_recycler_view"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                </android.support.v7.widget.RecyclerView>
-
-                <com.example.zhangnan.myfarm.OneSelfView.FlushView
-                    android:id="@+id/landing_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/white"/>
+                    android:layout_height="wrap_content"
+                    android:descendantFocusability="blocksDescendants">
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/fields_details_recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+    
+                    </android.support.v7.widget.RecyclerView>
+                </RelativeLayout>
 
             </LinearLayout>
 

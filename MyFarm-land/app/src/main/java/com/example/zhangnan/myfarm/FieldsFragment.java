@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.zhangnan.myfarm.OneSelfView.FlushView;
 import com.example.zhangnan.myfarm.activity_information.FieldsInfo;
 
 import java.util.ArrayList;
@@ -38,20 +39,26 @@ public class FieldsFragment extends Fragment {
     private EditText searchEditText;
     private ImageView searchCancel;
     private ImageView searchOk;
+    private LinearLayout fieldsRecyclerViewLinearLayout;
+    private FlushView flushView;
 
     private Map<String,String> mqttMessagesMap = new HashMap<>();
     private SoundAdapter soundAdapter;
     private List<FieldsInfo> fieldsInfos=new ArrayList<>();
     public static int clickItemPosition;
+    public static String fieldsName;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_fields, container, false);
+        fieldsRecyclerViewLinearLayout = (LinearLayout) view.findViewById(R.id.fields_recycler_view_linear_layout);
+        updateUI();
+
         new GetFiledInfoTask().execute();
         recyclerView = (RecyclerView) view.findViewById(R.id.fields_recycler_view);
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
-        recyclerView.addItemDecoration(new MyFarmActivity.MyFarmItemDecoration(2));
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),1));
+        recyclerView.addItemDecoration(new MyFarmItemDecoration(10));
         recyclerView.setAdapter(soundAdapter = new SoundAdapter(fieldsInfos));
         return view;
     }
@@ -88,7 +95,9 @@ public class FieldsFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
+            FragmentActivity.fragmentContainerDetalis.removeView(FragmentActivity.mTextView);
             clickItemPosition = getPosition() + 1;
+            fieldsName = (String) fieldNameTextView.getText();
             replaceFragment(new FieldsDetailsFragment(),"FieldsDetailsFragment");
         }
     }
@@ -123,6 +132,29 @@ public class FieldsFragment extends Fragment {
 
     }
 
+    private class MyFarmItemDecoration extends RecyclerView.ItemDecoration{
+        int mSpace;
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            super.getItemOffsets(outRect, view, parent, state);
+            outRect.bottom = mSpace;
+        }
+
+        public MyFarmItemDecoration(int space) {
+            this.mSpace = space;
+        }
+
+    }
+
+    private void updateUI(){
+        if (fieldsInfos.size() == 0){
+            fieldsRecyclerViewLinearLayout.addView( flushView = new FlushView(getActivity()));
+        }else {
+            fieldsRecyclerViewLinearLayout.removeView(flushView);
+        }
+    }
+
 
 
     private class GetFiledInfoTask extends AsyncTask<Void,Void,List<FieldsInfo>>{
@@ -142,7 +174,7 @@ public class FieldsFragment extends Fragment {
     public void replaceFragment(Fragment fragment, String tag) {
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.fragment_container, fragment, tag);
+        transaction.replace(R.id.fragment_container_detalis, fragment, tag);
         transaction.commit();
     }
 

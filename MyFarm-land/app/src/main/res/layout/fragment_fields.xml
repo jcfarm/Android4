@@ -2,10 +2,27 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#e0e0e0"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/white">
 
     <LinearLayout
+        android:background="@color/app_green"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <SearchView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/fields_search_edit_text"
+            android:hint="Search"
+            android:queryHint="Search" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/fields_recycler_view_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -14,7 +31,8 @@
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/fields_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/gray">
 
         </android.support.v7.widget.RecyclerView>
 

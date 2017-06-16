@@ -22,7 +22,7 @@ import android.widget.TextView;
 public class ControlActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    public String[] name = {"水泵","环流水机","照明灯","遮阳网","侧卷膜","顶卷膜"};
+    public String[] name = {"水泵","环流风机","照明灯","遮阳网","侧卷膜","顶卷膜"};
     public int[] image = {
             R.drawable.shuibeng,
             R.drawable.huanjing,
