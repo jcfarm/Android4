@@ -55,7 +55,7 @@ public class FieldsDetailsFragment extends Fragment {
     private SeekBar nmembraneSeekBar;
     private Switch lightSwitch;
     private Switch lampSwitch;
-    private String fieldsName;
+    private TextView nameTextView;
     private FlushView mUCFlushView;
 
     private MqttMessages mQttMessages;
@@ -93,6 +93,9 @@ public class FieldsDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_fields_details, container, false);
+
+        nameTextView = (TextView) view.findViewById(R.id.fields_name);
+        nameTextView.setText(FieldsFragment.fieldsName);
 
         imgIdArray = new int[]{R.drawable.img1, R.drawable.img2, R.drawable.img3,R.drawable.img4,R.drawable.img5};
         mImageViews = new ImageView[imgIdArray.length];

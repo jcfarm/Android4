@@ -30,6 +30,15 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/fields_name"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/app_green"
+                android:gravity="center"
+                android:textColor="#ffffff"
+                android:textSize="16sp" />
+
             <android.support.v4.view.ViewPager
                 android:id="@+id/fields_list_item_view_pager_banner"
                 android:layout_width="match_parent"

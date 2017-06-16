@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -13,8 +14,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.example.zhangnan.myfarm.Utils.DensityUtils;
 
 /**
  * Created by zhangnan on 17/4/25.
@@ -27,6 +32,7 @@ public class ControlFragment extends Fragment {
     private SoundAdapter soundAdapter;
     private String TAG="ControlActivity";
     private Intent i;
+    private int itemHeight;
 
     public static  int controlItemClickPosition;
 
@@ -34,9 +40,12 @@ public class ControlFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_control, container, false);
+
+        adjItemHeight();
+
         recyclerView = (RecyclerView) view.findViewById(R.id.fragment_control_recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),1));
-        recyclerView.addItemDecoration(new MyFarmActivity.MyFarmItemDecoration(2));
+        recyclerView.addItemDecoration(new MyFarmItemDecoration(2));
         recyclerView.setAdapter(soundAdapter = new SoundAdapter());
         return view;
     }
@@ -54,6 +63,9 @@ public class ControlFragment extends Fragment {
             controlTextViewName = (TextView)itemView.findViewById(R.id.control_list_item_textview_name);
 
             controlLinearLayout = (LinearLayout)itemView.findViewById(R.id.control_list_item);
+
+            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,itemHeight);
+            controlLinearLayout.setLayoutParams(param);
 
             controlLinearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -89,6 +101,32 @@ public class ControlFragment extends Fragment {
         }
 
     }
+
+
+    private class MyFarmItemDecoration extends RecyclerView.ItemDecoration{
+        int mSpace;
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            super.getItemOffsets(outRect, view, parent, state);
+            outRect.bottom = mSpace;
+        }
+
+        public MyFarmItemDecoration(int space) {
+            this.mSpace = space;
+        }
+
+    }
+
+    private void adjItemHeight(){
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        int result = getResources().getDimensionPixelSize(resourceId);
+
+        WindowManager wm = getActivity().getWindowManager();
+        int height = wm.getDefaultDisplay().getHeight();
+        itemHeight = (height - result - 2 * 6 ) / 6;
+    }
+
 
     public void replaceFragment(Fragment fragment, String tag) {
         FragmentManager manager = getFragmentManager();

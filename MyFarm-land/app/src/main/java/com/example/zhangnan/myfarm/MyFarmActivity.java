@@ -170,7 +170,7 @@ public class MyFarmActivity extends AppCompatActivity {
         }
     }
 
-    public static class MyFarmItemDecoration extends RecyclerView.ItemDecoration{
+    private class MyFarmItemDecoration extends RecyclerView.ItemDecoration{
         int mSpace;
 
         @Override

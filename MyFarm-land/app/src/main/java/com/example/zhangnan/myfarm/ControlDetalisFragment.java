@@ -3,6 +3,7 @@ package com.example.zhangnan.myfarm;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -38,7 +39,7 @@ public class ControlDetalisFragment extends Fragment {
         namePosition = ControlFragment.controlItemClickPosition;
         recyclerView = (RecyclerView) view.findViewById(R.id.control_details_recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
-        recyclerView.addItemDecoration(new MyFarmActivity.MyFarmItemDecoration(2));
+        recyclerView.addItemDecoration(new MyFarmItemDecoration(2));
         return view;
     }
 
@@ -155,6 +156,30 @@ public class ControlDetalisFragment extends Fragment {
                 case 5:return controller.getFilm_topControllers().size();
                 default:return controller.getWater_pumpControllers().size();
             }
+        }
+
+    }
+
+    private class MyFarmItemDecoration extends RecyclerView.ItemDecoration{
+        int mSpace;
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            super.getItemOffsets(outRect, view, parent, state);
+            if (parent.getChildAdapterPosition(view)%2 == 0) {
+                outRect.right = mSpace;
+                outRect.bottom = mSpace;
+                outRect.top = mSpace;
+            } else{
+                outRect.left = mSpace;
+                outRect.bottom = mSpace;
+                outRect.top = mSpace;
+            }
+
+        }
+
+        public MyFarmItemDecoration(int space) {
+            this.mSpace = space;
         }
 
     }

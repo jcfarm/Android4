@@ -22,7 +22,7 @@ public class FragmentActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment);
-        Log.d(TAG,"FragmentActivity");
+        getWindow().setStatusBarColor(getResources().getColor(R.color.app_green));
 
         switch (MyFarmActivity.selectItem){
             case 0:replaceFragment(new FieldsFragment(),"FieldsFragment");break;
@@ -40,13 +40,6 @@ public class FragmentActivity extends AppCompatActivity {
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(R.id.fragment_container, fragment, tag);
-        transaction.commit();
-    }
-
-    public void replaceDetalisFragment(Fragment fragment, String tag) {
-        FragmentManager manager = getFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.fragment_container_detalis, fragment, tag);
         transaction.commit();
     }
 }

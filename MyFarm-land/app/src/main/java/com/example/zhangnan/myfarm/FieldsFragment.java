@@ -43,6 +43,7 @@ public class FieldsFragment extends Fragment {
     private SoundAdapter soundAdapter;
     private List<FieldsInfo> fieldsInfos=new ArrayList<>();
     public static int clickItemPosition;
+    public static String fieldsName;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -51,7 +52,7 @@ public class FieldsFragment extends Fragment {
         new GetFiledInfoTask().execute();
         recyclerView = (RecyclerView) view.findViewById(R.id.fields_recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),1));
-        recyclerView.addItemDecoration(new MyFarmActivity.MyFarmItemDecoration(2));
+        recyclerView.addItemDecoration(new MyFarmItemDecoration(10));
         recyclerView.setAdapter(soundAdapter = new SoundAdapter(fieldsInfos));
         return view;
     }
@@ -89,6 +90,7 @@ public class FieldsFragment extends Fragment {
         @Override
         public void onClick(View v) {
             clickItemPosition = getPosition() + 1;
+            fieldsName = (String) fieldNameTextView.getText();
             replaceFragment(new FieldsDetailsFragment(),"FieldsDetailsFragment");
         }
     }
@@ -120,6 +122,21 @@ public class FieldsFragment extends Fragment {
             return fields.size();
         }
 
+
+    }
+
+    private class MyFarmItemDecoration extends RecyclerView.ItemDecoration{
+        int mSpace;
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            super.getItemOffsets(outRect, view, parent, state);
+            outRect.bottom = mSpace;
+        }
+
+        public MyFarmItemDecoration(int space) {
+            this.mSpace = space;
+        }
 
     }
 
