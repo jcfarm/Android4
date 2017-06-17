@@ -174,6 +174,7 @@ public class FieldsFragment extends Fragment {
     public void replaceFragment(Fragment fragment, String tag) {
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         transaction.replace(R.id.fragment_container_detalis, fragment, tag);
         transaction.commit();
     }

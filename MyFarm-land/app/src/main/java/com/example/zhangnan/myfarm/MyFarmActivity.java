@@ -140,8 +140,19 @@ public class MyFarmActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             selectItem = getPosition();
-            i= FragmentActivity.newIntent(MyFarmActivity.this);
-            startActivity(i);
+            switch (getPosition()){
+                case 0:
+                    i= FragmentActivity.newIntent(MyFarmActivity.this);
+                    startActivity(i);
+                    break;
+
+                case 1:
+                    i= FragmentActivity.newIntent(MyFarmActivity.this);
+                    startActivity(i);
+                    break;
+            }
+
+
 
         }
 

@@ -33,7 +33,10 @@ import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.melnykov.fab.FloatingActionButton;
 import com.melnykov.fab.ObservableScrollView;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,7 +59,7 @@ public class FieldsDetailsFragment extends Fragment {
     private Switch lightSwitch;
     private Switch lampSwitch;
     private TextView nameTextView;
-    private FlushView mUCFlushView;
+    private TextView dateTextView;
 
     private MqttMessages mQttMessages;
     private RecyclerView.Adapter fieldsDetailsAdapter;
@@ -82,7 +85,6 @@ public class FieldsDetailsFragment extends Fragment {
                     mFieldsDetailsInfo = (FieldsDetailsInfo) msg.obj;
                     count = mFieldsDetailsInfo.getSensorsCount();
                     updateData();
-                    //updateUI();
                     Log.d("count", String.valueOf(count));
                 }
             }
@@ -96,6 +98,7 @@ public class FieldsDetailsFragment extends Fragment {
 
         nameTextView = (TextView) view.findViewById(R.id.fields_name);
         nameTextView.setText(FieldsFragment.fieldsName);
+        dateTextView = (TextView) view.findViewById(R.id.fields_details_date_text_view);
 
         imgIdArray = new int[]{R.drawable.img1, R.drawable.img2, R.drawable.img3,R.drawable.img4,R.drawable.img5};
         mImageViews = new ImageView[imgIdArray.length];
@@ -304,18 +307,16 @@ public class FieldsDetailsFragment extends Fragment {
 
     private void updateData(){
         fieldsDetailsSensorsInfoToString();
+        setDate();
         fieldsDetailsAdapter.notifyDataSetChanged();
     }
 
-//    private void updateUI(){
-//        if (count != 0){
-//            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(0,0);
-//            mUCFlushView.setLayoutParams(param);
-//        }else {
-//            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
-//            mUCFlushView.setLayoutParams(param);
-//        }
-//    }
+    private void setDate(){
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateString = formatter.format(date);
+        dateTextView.setText(dateString+" 更新 ");
+    }
 
     private void fieldsDetailsSensorsInfoToString(){
         if (mFieldsDetailsInfo != null){

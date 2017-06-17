@@ -52,18 +52,34 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-
-                <TextView
-                    android:id="@+id/textView"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:background="#ffffff"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="10dp"
-                    android:text="详情"
-                    android:textColor="#000000"
-                    android:textSize="16sp"
-                    tools:ignore="RtlHardcoded,RtlSymmetry" />
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_weight="3"
+                            android:background="@color/white"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="10dp"
+                            android:text="详情"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            tools:ignore="RtlHardcoded,RtlSymmetry" />
+
+                        <TextView
+                            android:id="@+id/fields_details_date_text_view"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@color/white"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="10dp"
+                            android:text="正在等待数据..."
+                            android:textColor="@color/gray"
+                            android:textSize="16sp" />
+                    </LinearLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
