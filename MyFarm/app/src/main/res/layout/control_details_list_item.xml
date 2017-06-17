@@ -12,7 +12,9 @@
             android:layout_height="50dp"
             android:background="#ffffff"
             android:orientation="horizontal"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            android:id="@+id/control_details_list_item_Layout"
+            >
 
             <TextView
                 android:layout_weight="1"
