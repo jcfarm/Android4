@@ -65,6 +65,8 @@ public class FieldsDetailsFragment extends Fragment {
     private RecyclerView.Adapter fieldsDetailsAdapter;
 
     private FieldsDetailsInfo mFieldsDetailsInfo;
+    private FieldsDetailsInfo updateFieldsDetailsInfo;
+    private int firstTime = 0;
     private int count;
     public Map<Integer, String> fieldsDetailsSensorsInfoMap = new HashMap();
     private String[] sensorsName;
@@ -82,10 +84,18 @@ public class FieldsDetailsFragment extends Fragment {
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 if (msg.what == 1){
-                    mFieldsDetailsInfo = (FieldsDetailsInfo) msg.obj;
-                    count = mFieldsDetailsInfo.getSensorsCount();
-                    updateData();
-                    Log.d("count", String.valueOf(count));
+                    if (firstTime == 0){
+                        updateFieldsDetailsInfo= (FieldsDetailsInfo) msg.obj;
+                        mFieldsDetailsInfo = updateFieldsDetailsInfo;
+                        count = mFieldsDetailsInfo.getSensorsCount();
+                        updateData();
+                        Log.d("count", String.valueOf(count));
+                        firstTime += 1;
+                    }else {
+                        updateFieldsDetailsInfo= (FieldsDetailsInfo) msg.obj;
+                        updateBean();
+                        updateData();
+                    }
                 }
             }
         };
@@ -309,6 +319,23 @@ public class FieldsDetailsFragment extends Fragment {
         fieldsDetailsSensorsInfoToString();
         setDate();
         fieldsDetailsAdapter.notifyDataSetChanged();
+    }
+
+    private void updateBean(){
+        if (updateFieldsDetailsInfo != null){
+            if (updateFieldsDetailsInfo.getLight() != null){
+                mFieldsDetailsInfo.setLight(updateFieldsDetailsInfo.getLight());
+            }
+            if (updateFieldsDetailsInfo.getCo2() != null){
+                mFieldsDetailsInfo.setCo2(updateFieldsDetailsInfo.getCo2());
+            }
+            if (updateFieldsDetailsInfo.getWater() != null){
+                mFieldsDetailsInfo.setWater(updateFieldsDetailsInfo.getWater());
+            }
+            if (updateFieldsDetailsInfo.getSalt() != null){
+                mFieldsDetailsInfo.setSalt(updateFieldsDetailsInfo.getSalt());
+            }
+        }
     }
 
     private void setDate(){
