@@ -75,15 +75,9 @@ public class FieldsDetailsFragment extends Fragment {
     public Map<Integer, String> fieldsDetailsSensorsInfoMap = new HashMap();
     private String[] sensorsName;
 
-    private Context mContext;
-    private SQLiteDatabase mDatabase;
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mContext = getActivity();
-        mDatabase = new FieldsBaseHelper(mContext).getWritableDatabase();
 
         //订阅当前田地详情主题
         mQttMessages = new MqttMessages("fields"+String.valueOf(FieldsFragment.clickItemPosition));

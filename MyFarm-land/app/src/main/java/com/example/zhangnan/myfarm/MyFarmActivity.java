@@ -35,6 +35,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.zhangnan.myfarm.ChartUtils.ChartUtils;
+import com.example.zhangnan.myfarm.DBCache.FieldsBaseHelper;
 import com.example.zhangnan.myfarm.Utils.DensityUtils;
 import com.ikimuhendis.ldrawer.ActionBarDrawerToggle;
 import com.ikimuhendis.ldrawer.DrawerArrowDrawable;
@@ -75,6 +76,8 @@ public class MyFarmActivity extends AppCompatActivity {
     private boolean drawerArrowColor;
     public static int selectItem;
     private int itemHeight;
+    private Context mContext;
+    public static SQLiteDatabase mDatabase;
 
     private static boolean isExit = false;
 
@@ -91,6 +94,10 @@ public class MyFarmActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_myfarm);
+
+        //db
+        mContext = getApplicationContext();
+        mDatabase = new FieldsBaseHelper(mContext).getWritableDatabase();
 
         adjItemHeight();
         getWindow().setStatusBarColor(getResources().getColor(R.color.app_green));

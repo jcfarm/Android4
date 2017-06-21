@@ -1,12 +1,15 @@
 package com.example.zhangnan.myfarm;
 
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.example.zhangnan.myfarm.DBCache.FieldsDbSchema;
 import com.example.zhangnan.myfarm.activity_information.FieldsDetailsInfo;
 import com.example.zhangnan.myfarm.activity_information.blower;
 import com.example.zhangnan.myfarm.activity_information.co2;
@@ -25,13 +28,13 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
-import java.util.HashMap;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import static com.example.zhangnan.myfarm.MyFarmActivity.mDatabase;
 
-import static com.example.zhangnan.myfarm.FieldsFragment.clickItemPosition;
 
 /**
  * Created by zhangnan on 17/4/24.
@@ -39,13 +42,19 @@ import static com.example.zhangnan.myfarm.FieldsFragment.clickItemPosition;
 
 public class MqttMessages{
 
-    private String host = "tcp://10.0.2.2:1883";
+    //10.0.2.2:1883
+    private static final String TAG = "MqttMessages";
+    private String host = "tcp://192.168.56.1:1883";
     private Handler handler;
     private MqttClient client;
     private String myTopic;
     private MqttConnectOptions options;
     private ScheduledExecutorService scheduler;
     private String[] name ={"light","co2","water","salt"};
+    private JSONObject jsonObject;
+
+    private int firstTime = 0;
+    private String mqttInfo;
 
     //田地所有传感器数据JavaBean
     public  FieldsDetailsInfo fieldsDetailsInfo;
@@ -67,12 +76,18 @@ public class MqttMessages{
                     super.handleMessage(msg);
                     if(msg.what == 1) {
 
-                        String mqttInfo = msg.obj.toString();
+                        mqttInfo = msg.obj.toString();
                         Log.d("json",mqttInfo);
                         if (mqttInfo.length() != 0){
                             fieldsDetailsInfo = new FieldsDetailsInfo();
                             parserJson(mqttInfo);
                             sendMessages();
+
+                            if (firstTime == 0){
+                                addFileds(mqttInfo);
+                                updateFields(mqttInfo);
+                                firstTime += 1;
+                            }
                         }
 
 
@@ -177,7 +192,7 @@ public class MqttMessages{
 
     private  void parserJson(final String j) {
 
-        JSONObject jsonObject = JSON.parseObject(j);
+        jsonObject = JSON.parseObject(j);
         getFieldId(jsonObject);
         getSensors(jsonObject);
         getControls(jsonObject);
@@ -323,7 +338,7 @@ public class MqttMessages{
     }
 
     private  void getFieldId(JSONObject jsonObject){
-        fieldsDetailsInfo.setId(jsonObject.getInteger("id"));
+       fieldsDetailsInfo.setId(jsonObject.getInteger("id"));
     }
 
     private void sendMessages(){
@@ -339,5 +354,34 @@ public class MqttMessages{
 
     }
 
+    //db操作
+    private ContentValues getContentValues(String filedsInfo){
+        ContentValues values = new ContentValues();
+        values.put(FieldsDbSchema.FieldsTable.Cols.ID,String.valueOf(fieldsDetailsInfo.getId()));
+        values.put(FieldsDbSchema.FieldsTable.Cols.DATE,getDate());
+        values.put(FieldsDbSchema.FieldsTable.Cols.JSON, String.valueOf(jsonObject));
+        return values;
+    }
+
+    private void addFileds(String filedsInfo){
+        ContentValues values = getContentValues(filedsInfo);
+        mDatabase.insert(FieldsDbSchema.FieldsTable.NAME,null,values);
+    }
+
+    private String getDate(){
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateString = formatter.format(date);
+        return dateString;
+    }
+
+    private void updateFields(String filedsInfo){
+        String id = String.valueOf(fieldsDetailsInfo.getId());
+        ContentValues values = getContentValues(filedsInfo);
+
+        mDatabase.update(FieldsDbSchema.FieldsTable.NAME,values,
+                FieldsDbSchema.FieldsTable.Cols.ID
+                            + " =? ",new String[]{ id });
+    }
 
 }

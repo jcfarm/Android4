@@ -20,7 +20,8 @@ public class FieldsBaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(" create table " + FieldsDbSchema.FieldsTable.NAME + "(" +
-                FieldsDbSchema.FieldsTable.Cols.ID + "," +
+                FieldsDbSchema.FieldsTable.Cols.ID + " PRIMARY KEY UNIQUE," +
+                FieldsDbSchema.FieldsTable.Cols.DATE + "," +
                 FieldsDbSchema.FieldsTable.Cols.JSON +
                 ")"
         );
