@@ -7,6 +7,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Rect;
 import android.graphics.drawable.AnimatedStateListDrawable;
 import android.os.Bundle;

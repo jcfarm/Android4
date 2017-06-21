@@ -1,9 +1,12 @@
 package com.example.zhangnan.myfarm;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -23,6 +26,7 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import com.example.zhangnan.myfarm.ChartUtils.ChartUtils;
+import com.example.zhangnan.myfarm.DBCache.FieldsBaseHelper;
 import com.example.zhangnan.myfarm.OneSelfView.FlushView;
 import com.example.zhangnan.myfarm.activity_information.FieldsDetailsInfo;
 import com.example.zhangnan.myfarm.activity_information.co2;
@@ -71,9 +75,15 @@ public class FieldsDetailsFragment extends Fragment {
     public Map<Integer, String> fieldsDetailsSensorsInfoMap = new HashMap();
     private String[] sensorsName;
 
+    private Context mContext;
+    private SQLiteDatabase mDatabase;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mContext = getActivity();
+        mDatabase = new FieldsBaseHelper(mContext).getWritableDatabase();
 
         //订阅当前田地详情主题
         mQttMessages = new MqttMessages("fields"+String.valueOf(FieldsFragment.clickItemPosition));
