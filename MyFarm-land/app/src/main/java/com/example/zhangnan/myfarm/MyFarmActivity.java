@@ -87,7 +87,6 @@ public class MyFarmActivity extends AppCompatActivity {
         }
     };
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
