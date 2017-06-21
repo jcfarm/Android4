@@ -42,7 +42,7 @@ public class FlushView extends View {
     private Animation blueAnimator;
 
     private enum Status{
-        blue , violet , yellow
+        blue , violet , yellow, stop
     }
     private Status status = Status.blue;
 
@@ -151,6 +151,8 @@ public class FlushView extends View {
                     blueAnimator.cancel();
                     resetPosition();
                     startAnimation(blueAnimator);
+                }else if (status == Status.stop){
+                    blueAnimator.cancel();
                 }
             }
 
@@ -166,8 +168,8 @@ public class FlushView extends View {
         invalidate();
     }
 
-    public void resetStatus(){
-        status = Status.blue;
+    public void stop(){
+        status = Status.stop;
     }
 
 }

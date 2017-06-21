@@ -7,9 +7,13 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +36,7 @@ import java.util.Map;
 
 public class FieldsFragment extends Fragment {
 
+    private static final String TAG = "FieldsFragment";
     private RecyclerView recyclerView;
     private int recyclerViewClickTag = 0;//RerecyclerView点击标志
     private Intent i;
@@ -47,13 +52,32 @@ public class FieldsFragment extends Fragment {
     private List<FieldsInfo> fieldsInfos=new ArrayList<>();
     public static int clickItemPosition;
     public static String fieldsName;
+    private Handler updateUIHandler;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        updateUIHandler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                if (msg.what == 1){
+                    Log.d(TAG,"***********************************YES");
+                    fieldsRecyclerViewLinearLayout.removeViewsInLayout(1,0);
+                    flushView.stop();
+                }
+            }
+
+        };
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_fields, container, false);
         fieldsRecyclerViewLinearLayout = (LinearLayout) view.findViewById(R.id.fields_recycler_view_linear_layout);
-        updateUI();
+        fieldsRecyclerViewLinearLayout.addView( flushView = new FlushView(getActivity()));
 
         new GetFiledInfoTask().execute();
         recyclerView = (RecyclerView) view.findViewById(R.id.fields_recycler_view);
@@ -147,16 +171,6 @@ public class FieldsFragment extends Fragment {
 
     }
 
-    private void updateUI(){
-        if (fieldsInfos.size() == 0){
-            fieldsRecyclerViewLinearLayout.addView( flushView = new FlushView(getActivity()));
-        }else {
-            fieldsRecyclerViewLinearLayout.removeView(flushView);
-        }
-    }
-
-
-
     private class GetFiledInfoTask extends AsyncTask<Void,Void,List<FieldsInfo>>{
 
         @Override
@@ -166,8 +180,12 @@ public class FieldsFragment extends Fragment {
 
         @Override
         protected void onPostExecute(List<FieldsInfo> fieldsInfos) {
-            recyclerView.setAdapter(new SoundAdapter(fieldsInfos));
 
+            Message msg = new Message();
+            msg.what = 1;
+            updateUIHandler.sendMessage(msg);
+
+            recyclerView.setAdapter(new SoundAdapter(fieldsInfos));
         }
     }
 
