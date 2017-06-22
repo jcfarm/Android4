@@ -59,7 +59,7 @@ public class MqttMessages{
     //田地所有传感器数据JavaBean
     public  FieldsDetailsInfo fieldsDetailsInfo;
 
-    public static Handler updateUIHandler;
+    public  Handler updateUIHandler;
 
     public MqttMessages(String myTopic){
         this.myTopic =myTopic;

@@ -83,7 +83,7 @@ public class FieldsDetailsFragment extends Fragment {
         mQttMessages = new MqttMessages("fields"+String.valueOf(FieldsFragment.clickItemPosition));
         Log.d("topic","fields"+String.valueOf(FieldsFragment.clickItemPosition));
 
-        MqttMessages.updateUIHandler = new Handler(){
+        mQttMessages.updateUIHandler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
