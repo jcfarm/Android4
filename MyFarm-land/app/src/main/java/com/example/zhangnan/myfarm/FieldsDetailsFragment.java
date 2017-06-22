@@ -350,6 +350,10 @@ public class FieldsDetailsFragment extends Fragment {
         dateTextView.setText(dateString+" 更新 ");
     }
 
+    private void setDate(String date){
+        dateTextView.setText(date+" 更新 ");
+    }
+
     private void fieldsDetailsSensorsInfoToString(FieldsDetailsInfo mFieldsDetailsInfo){
         if (mFieldsDetailsInfo != null){
             int k = 0;
@@ -401,15 +405,20 @@ public class FieldsDetailsFragment extends Fragment {
     }
 
     //db read
-    private String getData(String id){
+    private String[] getData(String id){
+        String[] info = new String[2];
         String dbJson = new String();
+        String date = new String();
         Cursor cursor = mDatabase.query(FieldsDbSchema.FieldsTable.NAME,
-                new String[] { FieldsDbSchema.FieldsTable.Cols.ID, FieldsDbSchema.FieldsTable.Cols.JSON},
+                new String[] { FieldsDbSchema.FieldsTable.Cols.ID, FieldsDbSchema.FieldsTable.Cols.DATE ,FieldsDbSchema.FieldsTable.Cols.JSON},
                 "id=?", new String[] { id }, null, null, null);
         while (cursor.moveToNext()) {
            dbJson = cursor.getString(cursor.getColumnIndex(FieldsDbSchema.FieldsTable.Cols.JSON));
+           date = cursor.getString(cursor.getColumnIndex(FieldsDbSchema.FieldsTable.Cols.DATE));
+           info[0] = date;
+           info[1] = dbJson;
         }
-        return dbJson;
+        return info;
     }
 
     private int getFieldsId(){
@@ -419,17 +428,22 @@ public class FieldsDetailsFragment extends Fragment {
 
     private FieldsDetailsInfo parseData(){
         FieldsDetailsInfo fieldsDetailsInfo= new FieldsDetailsInfo();
-        String json = getData(String.valueOf(getFieldsId()));
-        if (json.length() != 0){
-            fieldsDetailsInfo = mQttMessages.parserJson(json,fieldsDetailsInfo);
+        String[] info = getData(String.valueOf(getFieldsId()));
+        if (info.length != 0){
+            fieldsDetailsInfo = mQttMessages.parserJson(info[1],fieldsDetailsInfo);
         }
         return fieldsDetailsInfo;
     }
 
     private void setData(){
         count = parseData().getSensorsCount();
+        String[] info = getData(String.valueOf(getFieldsId()));
+
         if (count!=0){
             updateData(parseData());
+        }
+        if (info.length != 0){
+            setDate(info[0]);
         }
 
     }
