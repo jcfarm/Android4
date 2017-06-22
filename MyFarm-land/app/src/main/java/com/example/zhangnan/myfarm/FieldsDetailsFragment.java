@@ -423,7 +423,6 @@ public class FieldsDetailsFragment extends Fragment {
         FieldsDetailsInfo fieldsDetailsInfo= new FieldsDetailsInfo();
         String json = getData(String.valueOf(getFieldsId()));
         if (json.length() != 0){
-            Log.d(TAG,"*****************************NULL POINT");
             fieldsDetailsInfo = mQttMessages.parserJson(json,fieldsDetailsInfo);
         }
         return fieldsDetailsInfo;
