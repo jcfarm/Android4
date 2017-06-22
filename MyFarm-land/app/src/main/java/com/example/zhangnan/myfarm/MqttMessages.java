@@ -53,8 +53,8 @@ public class MqttMessages{
     private String[] name ={"light","co2","water","salt"};
     private JSONObject jsonObject;
 
-    private int firstTime = 0;
     private String mqttInfo;
+    private int firstTime = 0;
 
     //田地所有传感器数据JavaBean
     public  FieldsDetailsInfo fieldsDetailsInfo;
@@ -80,12 +80,12 @@ public class MqttMessages{
                         Log.d("json",mqttInfo);
                         if (mqttInfo.length() != 0){
                             fieldsDetailsInfo = new FieldsDetailsInfo();
-                            parserJson(mqttInfo);
+                            fieldsDetailsInfo = parserJson(mqttInfo,fieldsDetailsInfo);
                             sendMessages();
 
                             if (firstTime == 0){
-                                addFileds(mqttInfo);
                                 updateFields(mqttInfo);
+                                addFileds(mqttInfo);
                                 firstTime += 1;
                             }
                         }
@@ -190,16 +190,17 @@ public class MqttMessages{
         }
     }
 
-    private  void parserJson(final String j) {
+    public FieldsDetailsInfo parserJson(final String j,final FieldsDetailsInfo fieldsDetailsInfo) {
 
         jsonObject = JSON.parseObject(j);
-        getFieldId(jsonObject);
-        getSensors(jsonObject);
-        getControls(jsonObject);
+        getFieldId(jsonObject,fieldsDetailsInfo);
+        getSensors(jsonObject,fieldsDetailsInfo);
+        getControls(jsonObject,fieldsDetailsInfo);
+        return fieldsDetailsInfo;
 
     }
 
-    private void getSensors(JSONObject jsonObject){
+    public void getSensors(JSONObject jsonObject, FieldsDetailsInfo fieldsDetailsInfo){
         JSONArray sensors =jsonObject.getJSONArray("sensors");
 
         if(sensors != null){
@@ -254,7 +255,7 @@ public class MqttMessages{
 
     }
 
-    private void getControls(JSONObject jsonObject){
+    public void getControls(JSONObject jsonObject, FieldsDetailsInfo fieldsDetailsInfo){
         String[] name ={"blower","lamp","web","nmembrane","tmembrane","pump"};
         JSONArray controls =jsonObject.getJSONArray("controls");
         if (controls != null) {
@@ -337,8 +338,10 @@ public class MqttMessages{
         }
     }
 
-    private  void getFieldId(JSONObject jsonObject){
-       fieldsDetailsInfo.setId(jsonObject.getInteger("id"));
+    public  void getFieldId(JSONObject jsonObject, FieldsDetailsInfo fieldsDetailsInfo){
+        if (jsonObject.getInteger("id")!= null){
+            fieldsDetailsInfo.setId(jsonObject.getInteger("id"));
+        }
     }
 
     private void sendMessages(){
@@ -355,16 +358,16 @@ public class MqttMessages{
     }
 
     //db操作
-    private ContentValues getContentValues(String filedsInfo){
+    private ContentValues getContentValues(String filedsjson){
         ContentValues values = new ContentValues();
         values.put(FieldsDbSchema.FieldsTable.Cols.ID,String.valueOf(fieldsDetailsInfo.getId()));
         values.put(FieldsDbSchema.FieldsTable.Cols.DATE,getDate());
-        values.put(FieldsDbSchema.FieldsTable.Cols.JSON, String.valueOf(jsonObject));
+        values.put(FieldsDbSchema.FieldsTable.Cols.JSON, filedsjson);
         return values;
     }
 
-    private void addFileds(String filedsInfo){
-        ContentValues values = getContentValues(filedsInfo);
+    private void addFileds(String filedsjson){
+        ContentValues values = getContentValues(filedsjson);
         mDatabase.insert(FieldsDbSchema.FieldsTable.NAME,null,values);
     }
 
@@ -375,13 +378,13 @@ public class MqttMessages{
         return dateString;
     }
 
-    private void updateFields(String filedsInfo){
+    private void updateFields(String filedsjson){
         String id = String.valueOf(fieldsDetailsInfo.getId());
-        ContentValues values = getContentValues(filedsInfo);
+        ContentValues values = getContentValues(filedsjson);
 
         mDatabase.update(FieldsDbSchema.FieldsTable.NAME,values,
                 FieldsDbSchema.FieldsTable.Cols.ID
-                            + " =? ",new String[]{ id });
+                        + " =? ",new String[]{ id });
     }
 
 }

@@ -1,15 +1,15 @@
 package com.example.zhangnan.myfarm;
 
 import android.app.Fragment;
-import android.content.Context;
+import android.content.ContentValues;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Rect;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -21,13 +21,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import com.example.zhangnan.myfarm.ChartUtils.ChartUtils;
-import com.example.zhangnan.myfarm.DBCache.FieldsBaseHelper;
-import com.example.zhangnan.myfarm.OneSelfView.FlushView;
+import com.example.zhangnan.myfarm.DBCache.FieldsDbSchema;
 import com.example.zhangnan.myfarm.activity_information.FieldsDetailsInfo;
 import com.example.zhangnan.myfarm.activity_information.co2;
 import com.example.zhangnan.myfarm.activity_information.light;
@@ -45,13 +43,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.example.zhangnan.myfarm.MyFarmActivity.mDatabase;
+
 /**
  * Created by zhangnan on 17/4/28.
  */
 
 public class FieldsDetailsFragment extends Fragment {
 
-
+    private static final String TAG = "FieldsDetailsFragment";
     private ViewPager viewPager_banner;
     private ImageView[] mImageViews;
     private int[] imgIdArray;
@@ -92,13 +92,13 @@ public class FieldsDetailsFragment extends Fragment {
                         updateFieldsDetailsInfo= (FieldsDetailsInfo) msg.obj;
                         mFieldsDetailsInfo = updateFieldsDetailsInfo;
                         count = mFieldsDetailsInfo.getSensorsCount();
-                        updateData();
+                        updateData(mFieldsDetailsInfo);
                         Log.d("count", String.valueOf(count));
                         firstTime += 1;
                     }else {
                         updateFieldsDetailsInfo= (FieldsDetailsInfo) msg.obj;
                         updateBean();
-                        updateData();
+                        updateData(mFieldsDetailsInfo);
                     }
                 }
             }
@@ -130,6 +130,7 @@ public class FieldsDetailsFragment extends Fragment {
         fieldsDetailsRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
         fieldsDetailsRecyclerView.addItemDecoration(new MyFieldsDetailsItemDecoration(2));
         fieldsDetailsRecyclerView.setAdapter(fieldsDetailsAdapter = new FieldsDetailsAdapter());
+        setData();
 
         viewPager_banner = (ViewPager) view.findViewById(R.id.fields_list_item_view_pager_banner);
         viewPager_banner.setAdapter(new BannerViewPagerAdapter());
@@ -319,8 +320,8 @@ public class FieldsDetailsFragment extends Fragment {
         mQttMessages.close();
     }
 
-    private void updateData(){
-        fieldsDetailsSensorsInfoToString();
+    private void updateData(FieldsDetailsInfo mFieldsDetailsInfo){
+        fieldsDetailsSensorsInfoToString(mFieldsDetailsInfo);
         setDate();
         fieldsDetailsAdapter.notifyDataSetChanged();
     }
@@ -349,7 +350,7 @@ public class FieldsDetailsFragment extends Fragment {
         dateTextView.setText(dateString+" 更新 ");
     }
 
-    private void fieldsDetailsSensorsInfoToString(){
+    private void fieldsDetailsSensorsInfoToString(FieldsDetailsInfo mFieldsDetailsInfo){
         if (mFieldsDetailsInfo != null){
             int k = 0;
             sensorsName = new String[count];
@@ -395,6 +396,43 @@ public class FieldsDetailsFragment extends Fragment {
             }
 
 
+        }
+
+    }
+
+    //db read
+    private String getData(String id){
+        String dbJson = new String();
+        Cursor cursor = mDatabase.query(FieldsDbSchema.FieldsTable.NAME,
+                new String[] { FieldsDbSchema.FieldsTable.Cols.ID, FieldsDbSchema.FieldsTable.Cols.JSON},
+                "id=?", new String[] { id }, null, null, null);
+        while (cursor.moveToNext()) {
+           dbJson = cursor.getString(cursor.getColumnIndex(FieldsDbSchema.FieldsTable.Cols.JSON));
+        }
+
+        Log.d(TAG, "null json"+dbJson.length());
+        return dbJson;
+    }
+
+    private int getFieldsId(){
+        int id = FieldsFragment.clickItemPosition;
+        return id;
+    }
+
+    private FieldsDetailsInfo parseData(){
+        FieldsDetailsInfo fieldsDetailsInfo= new FieldsDetailsInfo();
+        String json = getData(String.valueOf(getFieldsId()));
+        if (json.length() != 0){
+            Log.d(TAG,"*****************************NULL POINT");
+            fieldsDetailsInfo = mQttMessages.parserJson(json,fieldsDetailsInfo);
+        }
+        return fieldsDetailsInfo;
+    }
+
+    private void setData(){
+        count = parseData().getSensorsCount();
+        if (count!=0){
+            updateData(parseData());
         }
 
     }
