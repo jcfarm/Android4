@@ -409,8 +409,6 @@ public class FieldsDetailsFragment extends Fragment {
         while (cursor.moveToNext()) {
            dbJson = cursor.getString(cursor.getColumnIndex(FieldsDbSchema.FieldsTable.Cols.JSON));
         }
-
-        Log.d(TAG, "null json"+dbJson.length());
         return dbJson;
     }
 
